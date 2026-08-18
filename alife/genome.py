@@ -12,7 +12,7 @@ GENOME_KEYS = [
     "cortisol_base", "cortisol_reactivity", "cortisol_decay",
     "testosterone_base", "testosterone_reactivity",
     "aggression_gain", "social_gain",
-    "lamarckian_weight", "metabolism",
+    "lamarckian_weight", "metabolism", "longevity",
 ]
 
 BOUNDS = {
@@ -39,6 +39,7 @@ BOUNDS = {
     "social_gain": (0.0, 2.0),
     "lamarckian_weight": (0.0, 0.9),
     "metabolism": (0.01, 0.10),
+    "longevity": (0.3, 1.5),
 }
 
 MUT_SCALE = {
@@ -50,7 +51,7 @@ KIN_KEYS = [
     "conn_prob", "threshold",
     "dopamine_base", "serotonin_base",
     "oxytocin_gain", "cortisol_decay",
-    "aggression_gain", "social_gain",
+    "aggression_gain", "social_gain", "longevity",
 ]
 
 

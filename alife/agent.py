@@ -231,7 +231,15 @@ class Agent:
 
         self.hormones.update(dt, events, self.genome)
 
-        if self.energy <= 0.0 or self.age > 26000:
+        # Расчёт времени жизни на основе биологии (генома)
+        # Базовое время жизни зависит от longevity гена, метаболизма и гормонов
+        base_lifespan = 8000.0 * self.genome["longevity"]
+        metabolism_factor = 1.0 - (self.genome["metabolism"] - 0.05) * 2.0
+        cortisol_factor = 1.0 - clamp(self.hormones.C * 0.1, 0.0, 0.3)
+        max_lifespan = base_lifespan * metabolism_factor * cortisol_factor
+        lifespan = min(max_lifespan, 10000.0)
+        
+        if self.energy <= 0.0 or self.age > lifespan:
             self.alive = False
             return
 
