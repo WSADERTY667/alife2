@@ -1,0 +1,19 @@
+Start testing: Aug 18 19:50 UTC
+----------------------------------------------------------
+1/1 Testing: test_version
+1/1 Test: test_version
+Command: "/workspace/cpp/build/test_version"
+Directory: /workspace/cpp/build
+"test_version" start time: Aug 18 19:50 UTC
+Output:
+----------------------------------------------------------
+PASS: version = 0.1.0
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_version" end time: Aug 18 19:50 UTC
+"test_version" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 18 19:50 UTC

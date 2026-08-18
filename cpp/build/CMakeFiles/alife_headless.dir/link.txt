@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/alife_headless.dir/src/headless_main.cpp.o -o alife_headless  libalife_core.a 
