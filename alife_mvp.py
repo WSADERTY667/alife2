@@ -389,6 +389,37 @@ class Hormones:
             "breakdown": self.breakdown,
         }
 
+    def get_mood(self):
+        """Определяет текущее настроение на основе гормонального профиля."""
+        # Сначала проверяем критические состояния
+        if self.breakdown > 0.5:
+            return "ярость"
+        
+        if self.depression > 0.5:
+            return "грусть"
+        
+        # Очень низкие все гормоны или диссоциация = отрешённость (проверяем до скуки)
+        if self.D < 0.3 and self.S < 0.3 and self.O < 0.3:
+            return "отрешённость"
+        
+        # Высокий кортизол + отстранённость = отрешённость
+        if self.C > 0.8 and self.S < 0.4:
+            return "отрешённость"
+        
+        # Высокий дофамин + высокий серотонин = радость
+        if self.D > 0.7 and self.S > 0.6:
+            return "радость"
+        
+        # Низкий дофамин + низкий кортизол + низкий тестостерон = скука
+        if self.D < 0.4 and self.C < 0.4 and self.T < 0.4:
+            return "скука"
+        
+        # Высокий кортизол + высокий тестостерон + низкий серотонин = ярость
+        if self.C > 0.7 and self.T > 0.6 and self.S < 0.5:
+            return "ярость"
+        
+        return "нормальное"
+
 
 # =====================================================================
 # 4. SPIKING NEURAL NETWORK BRAIN
@@ -969,18 +1000,14 @@ def draw_panel(screen, world, font, selected):
     )
     y += 18
 
-    mood = "normal"
-    if h.breakdown > 0.5:
-        mood = "BREAKDOWN"
-    elif h.depression > 0.5:
-        mood = "depressed"
+    mood = h.get_mood()
 
     draw_text(
         screen,
         font,
         10,
         y,
-        f"mood: {mood}  allostatic: {h.allostatic:.2f}  depression: {h.depression:.2f}",
+        f"настроение: {mood}  аллостаз: {h.allostatic:.2f}  депрессия: {h.depression:.2f}",
     )
     y += 18
 

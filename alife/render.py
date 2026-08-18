@@ -44,12 +44,8 @@ def draw_panel(screen, world, font, selected):
     y += 18
     draw_text(screen, font, 10, y, f"D {h.D:.2f}  S {h.S:.2f}  O {h.O:.2f}  C {h.C:.2f}  T {h.T:.2f}")
     y += 18
-    mood = "normal"
-    if h.breakdown > 0.5:
-        mood = "BREAKDOWN"
-    elif h.depression > 0.5:
-        mood = "depressed"
-    draw_text(screen, font, 10, y, f"mood: {mood}  allostatic: {h.allostatic:.2f}  depression: {h.depression:.2f}")
+    mood = h.get_mood()
+    draw_text(screen, font, 10, y, f"настроение: {mood}  аллостаз: {h.allostatic:.2f}  депрессия: {h.depression:.2f}")
     y += 18
     eff = h.effects(selected.genome)
     draw_text(
