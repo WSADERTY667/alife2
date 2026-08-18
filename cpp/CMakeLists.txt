@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Статическая библиотека alife_core
 add_library(alife_core STATIC
     src/version.cpp
+    src/rng.cpp
 )
 
 target_include_directories(alife_core PUBLIC
@@ -25,4 +26,8 @@ enable_testing()
 add_executable(test_version tests/test_version.cpp)
 target_link_libraries(test_version PRIVATE alife_core)
 
+add_executable(test_rng tests/test_rng.cpp)
+target_link_libraries(test_rng PRIVATE alife_core)
+
 add_test(NAME test_version COMMAND test_version)
+add_test(NAME test_rng COMMAND test_rng)

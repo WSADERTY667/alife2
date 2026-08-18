@@ -1,6 +1,7 @@
 /workspace/cpp/build/CMakeFiles/alife_core.dir
 /workspace/cpp/build/CMakeFiles/alife_headless.dir
 /workspace/cpp/build/CMakeFiles/test_version.dir
+/workspace/cpp/build/CMakeFiles/test_rng.dir
 /workspace/cpp/build/CMakeFiles/test.dir
 /workspace/cpp/build/CMakeFiles/edit_cache.dir
 /workspace/cpp/build/CMakeFiles/rebuild_cache.dir

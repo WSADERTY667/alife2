@@ -1,2 +1,2 @@
-/usr/bin/ar qc libalife_core.a CMakeFiles/alife_core.dir/src/version.cpp.o
+/usr/bin/ar qc libalife_core.a CMakeFiles/alife_core.dir/src/version.cpp.o CMakeFiles/alife_core.dir/src/rng.cpp.o
 /usr/bin/ranlib libalife_core.a

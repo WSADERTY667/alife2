@@ -165,6 +165,19 @@ test_version/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_version.dir/build.make CMakeFiles/test_version.dir/build
 .PHONY : test_version/fast
 
+#=============================================================================
+# Target rules for targets named test_rng
+
+# Build rule for target.
+test_rng: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_rng
+.PHONY : test_rng
+
+# fast build rule for target.
+test_rng/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/build
+.PHONY : test_rng/fast
+
 src/headless_main.o: src/headless_main.cpp.o
 .PHONY : src/headless_main.o
 
@@ -189,6 +202,30 @@ src/headless_main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_headless.dir/build.make CMakeFiles/alife_headless.dir/src/headless_main.cpp.s
 .PHONY : src/headless_main.cpp.s
 
+src/rng.o: src/rng.cpp.o
+.PHONY : src/rng.o
+
+# target to build an object file
+src/rng.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/rng.cpp.o
+.PHONY : src/rng.cpp.o
+
+src/rng.i: src/rng.cpp.i
+.PHONY : src/rng.i
+
+# target to preprocess a source file
+src/rng.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/rng.cpp.i
+.PHONY : src/rng.cpp.i
+
+src/rng.s: src/rng.cpp.s
+.PHONY : src/rng.s
+
+# target to generate assembly for a file
+src/rng.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/rng.cpp.s
+.PHONY : src/rng.cpp.s
+
 src/version.o: src/version.cpp.o
 .PHONY : src/version.o
 
@@ -212,6 +249,30 @@ src/version.s: src/version.cpp.s
 src/version.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/version.cpp.s
 .PHONY : src/version.cpp.s
+
+tests/test_rng.o: tests/test_rng.cpp.o
+.PHONY : tests/test_rng.o
+
+# target to build an object file
+tests/test_rng.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/tests/test_rng.cpp.o
+.PHONY : tests/test_rng.cpp.o
+
+tests/test_rng.i: tests/test_rng.cpp.i
+.PHONY : tests/test_rng.i
+
+# target to preprocess a source file
+tests/test_rng.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/tests/test_rng.cpp.i
+.PHONY : tests/test_rng.cpp.i
+
+tests/test_rng.s: tests/test_rng.cpp.s
+.PHONY : tests/test_rng.s
+
+# target to generate assembly for a file
+tests/test_rng.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/tests/test_rng.cpp.s
+.PHONY : tests/test_rng.cpp.s
 
 tests/test_version.o: tests/test_version.cpp.o
 .PHONY : tests/test_version.o
@@ -248,13 +309,20 @@ help:
 	@echo "... test"
 	@echo "... alife_core"
 	@echo "... alife_headless"
+	@echo "... test_rng"
 	@echo "... test_version"
 	@echo "... src/headless_main.o"
 	@echo "... src/headless_main.i"
 	@echo "... src/headless_main.s"
+	@echo "... src/rng.o"
+	@echo "... src/rng.i"
+	@echo "... src/rng.s"
 	@echo "... src/version.o"
 	@echo "... src/version.i"
 	@echo "... src/version.s"
+	@echo "... tests/test_rng.o"
+	@echo "... tests/test_rng.i"
+	@echo "... tests/test_rng.s"
 	@echo "... tests/test_version.o"
 	@echo "... tests/test_version.i"
 	@echo "... tests/test_version.s"
