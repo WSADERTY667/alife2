@@ -13,6 +13,12 @@ target_include_directories(alife_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+# Исполняемый файл alife_headless
+add_executable(alife_headless
+    src/headless_main.cpp
+)
+target_link_libraries(alife_headless PRIVATE alife_core)
+
 # Тесты
 enable_testing()
 
