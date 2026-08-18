@@ -1,3 +1,37 @@
-(docs/CLI.md, python/tests/test_cli.py, python/main.py - only source/config files, no build artifacts, dependencies, or temp files)
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-(empty - output nothing)
+# Testing
+.pytest_cache/
+.coverage
+coverage/
+htmlcov/
+
+# Dependencies
+.venv/
+venv/
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Build artifacts
+dist/
+build/
+*.o
+*.obj
+*.out
+```
