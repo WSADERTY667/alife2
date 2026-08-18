@@ -13,6 +13,19 @@ class Hormones:
         self.allostatic = 0.0
         self.depression = 0.0
         self.breakdown = 0.0
+        
+        # Полу-распады гормонов - наследуемые параметры распада
+        self.D_decay = genome.get("dopamine_decay", 0.05)
+        self.S_decay = genome.get("serotonin_decay", 0.05)
+        self.O_decay = genome.get("oxytocin_decay", 0.05)
+        self.C_decay = genome.get("cortisol_decay", 0.05)
+        self.T_decay = genome.get("testosterone_decay", 0.05)
+        
+        # Чувствительность к гормонам - наследуемые множители эффекта
+        self.S_sensitivity = genome.get("serotonin_sensitivity", 1.0)
+        self.O_sensitivity = genome.get("oxytocin_sensitivity", 1.0)
+        self.C_sensitivity = genome.get("cortisol_sensitivity", 1.0)
+        self.T_sensitivity = genome.get("testosterone_sensitivity", 1.0)
 
     def update(self, dt, events, genome):
         reward = events.get("reward", 0.0)
@@ -25,40 +38,49 @@ class Hormones:
         injury = events.get("injury", 0.0)
         fear = events.get("fear", 0.0)
 
-        # Дофамин
+        # Дофамин с учетом наследуемого распада
+        D_decay_rate = self.D_decay if hasattr(self, 'D_decay') else genome.get("dopamine_decay", 0.05)
         self.D += (
             genome["dopamine_reactivity"] * (reward - punishment) * 0.25
-            + 0.02 * (genome["dopamine_base"] - self.D)
+            + D_decay_rate * (genome["dopamine_base"] - self.D)
         )
         self.D = clamp(self.D, 0.0, 2.0)
 
-        # Кортизол
+        # Кортизол с учетом наследуемой чувствительности и распада
+        C_decay_rate = self.C_decay if hasattr(self, 'C_decay') else genome.get("cortisol_decay", 0.05)
+        C_sens = self.C_sensitivity if hasattr(self, 'C_sensitivity') else 1.0
         stress = punishment * 1.0 + conflict * 0.6 + hunger * 0.35 + injury * 0.9 + fear * 0.8
         self.C += (
-            genome["cortisol_reactivity"] * stress * 0.12
-            - genome["cortisol_decay"] * (self.C - genome["cortisol_base"])
+            genome["cortisol_reactivity"] * stress * 0.12 * C_sens
+            - C_decay_rate * (self.C - genome["cortisol_base"])
         )
         self.C = clamp(self.C, 0.0, 2.0)
 
-        # Серотонин
+        # Серотонин с учетом наследуемой чувствительности и распада
+        S_decay_rate = self.S_decay if hasattr(self, 'S_decay') else genome.get("serotonin_decay", 0.05)
+        S_sens = self.S_sensitivity if hasattr(self, 'S_sensitivity') else 1.0
         self.S += (
-            genome["serotonin_decay"] * (genome["serotonin_base"] - self.S)
+            S_decay_rate * (genome["serotonin_base"] - self.S) * S_sens
             + reward * 0.03
             - max(0.0, self.C - 0.8) * 0.05
         )
         self.S = clamp(self.S, 0.0, 2.0)
 
-        # Окситоцин
+        # Окситоцин с учетом наследуемой чувствительности и распада
+        O_decay_rate = self.O_decay if hasattr(self, 'O_decay') else genome.get("oxytocin_decay", 0.05)
+        O_sens = self.O_sensitivity if hasattr(self, 'O_sensitivity') else 1.0
         self.O += (
-            genome["oxytocin_gain"] * (social * 0.06 + kin * 0.08)
-            - 0.05 * (self.O - genome["oxytocin_base"])
+            genome["oxytocin_gain"] * (social * 0.06 + kin * 0.08) * O_sens
+            - O_decay_rate * (self.O - genome["oxytocin_base"])
         )
         self.O = clamp(self.O, 0.0, 2.0)
 
-        # Тестостерон
+        # Тестостерон с учетом наследуемой чувствительности и распада
+        T_decay_rate = self.T_decay if hasattr(self, 'T_decay') else genome.get("testosterone_decay", 0.05)
+        T_sens = self.T_sensitivity if hasattr(self, 'T_sensitivity') else 1.0
         self.T += (
-            genome["testosterone_reactivity"] * (conflict * 0.08 + dominance * 0.05)
-            - 0.04 * (self.T - genome["testosterone_base"])
+            genome["testosterone_reactivity"] * (conflict * 0.08 + dominance * 0.05) * T_sens
+            - T_decay_rate * (self.T - genome["testosterone_base"])
         )
         self.T = clamp(self.T, 0.0, 2.0)
 
@@ -80,22 +102,29 @@ class Hormones:
 
     def effects(self, genome, hunger=0.0):
         dopamine_error = self.D - genome["dopamine_base"]
+        
+        # Учет чувствительности к гормонам в эффектах
+        C_eff = self.C * (self.C_sensitivity if hasattr(self, 'C_sensitivity') else 1.0)
+        T_eff = self.T * (self.T_sensitivity if hasattr(self, 'T_sensitivity') else 1.0)
+        S_eff = self.S * (self.S_sensitivity if hasattr(self, 'S_sensitivity') else 1.0)
+        O_eff = self.O * (self.O_sensitivity if hasattr(self, 'O_sensitivity') else 1.0)
+        
         arousal = clamp(
-            0.15 + self.C * 0.55 + self.T * 0.25 - self.S * 0.15 + hunger * 0.20,
+            0.15 + C_eff * 0.55 + T_eff * 0.25 - S_eff * 0.15 + hunger * 0.20,
             -0.5, 1.5,
         )
         plasticity = genome["plasticity_gain"] * (
             0.15 + max(0.0, dopamine_error) * 1.8
-        ) * (1.0 - min(0.75, self.C * 0.35))
+        ) * (1.0 - min(0.75, C_eff * 0.35))
         if self.depression > 0.5:
             plasticity *= 0.45
         if self.breakdown > 0.5:
             plasticity *= 0.20
         aggression = genome["aggression_gain"] * (
-            self.T * 0.55 + self.C * 0.35 - self.S * 0.25 + hunger * 0.20
+            T_eff * 0.55 + C_eff * 0.35 - S_eff * 0.25 + hunger * 0.20
         )
         sociality = genome["social_gain"] * (
-            self.O * 0.85 + self.S * 0.10 - self.C * 0.20
+            O_eff * 0.85 + S_eff * 0.10 - C_eff * 0.20
         )
         dopamine_signal = clamp(dopamine_error * 1.5, -1.0, 1.0)
         return {

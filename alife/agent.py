@@ -8,7 +8,7 @@ from .config import (
     SENSE_RANGE, SOCIAL_RANGE, EAT_RANGE, ATTACK_RANGE,
     TURN_RATE, MAX_SPEED, AGENT_RADIUS,
     EAT_THRESHOLD, ATTACK_THRESHOLD, ATTACK_DAMAGE, ATTACK_COST,
-    REPRO_BASE, REPRO_COST, REFLEX_ASSIST, LAMARCKIAN, N_HIDDEN,
+    REPRO_BASE, REPRO_COST, REFLEX_ASSIST, LAMARCKIAN,
     clamp,
 )
 from .utils import normalize_angle, wall_front_sensor
@@ -26,7 +26,8 @@ class Agent:
         self.pos = np.array(pos, dtype=np.float32)
         self.angle = random.uniform(-math.pi, math.pi)
         self.genome = genome
-        self.brain = Brain(genome, N_HIDDEN, parent_weights)
+        # Передаем n_hidden из генома в мозг
+        self.brain = Brain(genome, genome.n_hidden if hasattr(genome, 'n_hidden') else None, parent_weights)
         self.hormones = Hormones(genome)
         self.energy = START_ENERGY
         self.age = 0.0

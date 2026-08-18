@@ -12,13 +12,19 @@ from .brain import Brain
 
 
 class World:
-    SCHEMA_VERSION = 1
+    SCHEMA_VERSION = 2  # Updated schema version for new genome features
     
     def __init__(self):
         self.agents = []
         self.foods = []
         self.tick = 0
         self.newborns = []
+        # Статистика поколений
+        self.generation_stats = {
+            "max_generation": 0,
+            "generation_counts": {},  # generation -> count of agents
+            "lineage_stats": {},  # tribal_tag -> {generations, population, avg_fitness}
+        }
         for _ in range(FOOD_MAX):
             self.spawn_food()
         for _ in range(AGENT_COUNT):
@@ -75,6 +81,41 @@ class World:
         kin_sim = genome_similarity(agent.genome, best.genome)
         return best_d, angle, best, kin_sim
 
+    def update_generation_stats(self):
+        """Обновляет статистику поколений."""
+        gen_counts = {}
+        lineage_data = {}
+        
+        for agent in self.agents:
+            gen = agent.generation
+            gen_counts[gen] = gen_counts.get(gen, 0) + 1
+            
+            # Собираем данные по племенным тегам
+            for tag in agent.genome.tribal_tags:
+                if tag not in lineage_data:
+                    lineage_data[tag] = {
+                        "count": 0,
+                        "total_energy": 0.0,
+                        "generations": set(),
+                    }
+                lineage_data[tag]["count"] += 1
+                lineage_data[tag]["total_energy"] += agent.energy
+                lineage_data[tag]["generations"].add(gen)
+        
+        # Обновляем статистику
+        self.generation_stats["max_generation"] = max(gen_counts.keys()) if gen_counts else 0
+        self.generation_stats["generation_counts"] = gen_counts
+        
+        # Преобразуем множества в списки для JSON-сериализуемости
+        self.generation_stats["lineage_stats"] = {
+            tag: {
+                "count": data["count"],
+                "avg_energy": data["total_energy"] / data["count"] if data["count"] > 0 else 0.0,
+                "generation_span": [min(data["generations"]), max(data["generations"])] if data["generations"] else [0, 0],
+            }
+            for tag, data in lineage_data.items()
+        }
+
     def update(self):
         self.tick += 1
         self.newborns = []
@@ -92,6 +133,27 @@ class World:
         if len(self.agents) < MIN_AGENTS:
             for _ in range(MIN_AGENTS - len(self.agents)):
                 self.spawn_random_agent()
+        
+        # Обновляем статистику поколений каждые 100 тиков
+        if self.tick % 100 == 0:
+            self.update_generation_stats()
+
+    def get_generation_report(self):
+        """Возвращает текстовый отчет о статистике поколений."""
+        report = []
+        report.append(f"=== Generation Statistics (tick {self.tick}) ===")
+        report.append(f"Max generation: {self.generation_stats['max_generation']}")
+        report.append("Generation distribution:")
+        for gen in sorted(self.generation_stats['generation_counts'].keys()):
+            count = self.generation_stats['generation_counts'][gen]
+            report.append(f"  Gen {gen}: {count} agents")
+        
+        if self.generation_stats['lineage_stats']:
+            report.append("Lineage stats:")
+            for tag, data in list(self.generation_stats['lineage_stats'].items())[:5]:
+                report.append(f"  Tag '{tag}': {data['count']} agents, avg energy={data['avg_energy']:.1f}, gens={data['generation_span']}")
+        
+        return "\n".join(report)
 
     def save(self, path="save_world"):
         """Сохранить мир в JSON + NPZ файлы."""
@@ -112,6 +174,7 @@ class World:
                 for f in self.foods
             ],
             "agents": [],
+            "generation_stats": self.generation_stats,
         }
         
         # Данные для NPZ (веса мозгов)
@@ -132,6 +195,8 @@ class World:
                 "alive": agent.alive,
                 "genome_genes": agent.genome.genes.copy(),
                 "genome_tag": agent.genome.tag,
+                "genome_tribal_tags": agent.genome.tribal_tags,
+                "genome_n_hidden": agent.genome.n_hidden,
                 "hormones": {
                     "D": float(agent.hormones.D),
                     "S": float(agent.hormones.S),
@@ -141,6 +206,15 @@ class World:
                     "allostatic": float(agent.hormones.allostatic),
                     "depression": float(agent.hormones.depression),
                     "breakdown": float(agent.hormones.breakdown),
+                    "D_decay": float(agent.hormones.D_decay),
+                    "S_decay": float(agent.hormones.S_decay),
+                    "O_decay": float(agent.hormones.O_decay),
+                    "C_decay": float(agent.hormones.C_decay),
+                    "T_decay": float(agent.hormones.T_decay),
+                    "S_sensitivity": float(agent.hormones.S_sensitivity),
+                    "O_sensitivity": float(agent.hormones.O_sensitivity),
+                    "C_sensitivity": float(agent.hormones.C_sensitivity),
+                    "T_sensitivity": float(agent.hormones.T_sensitivity),
                 },
                 "brain_idx": i,
             }
@@ -182,12 +256,17 @@ class World:
         brain_data = np.load(npz_path)
         
         # Проверка версии схемы
-        schema_version = world_data.get("schema_version", 0)
-        if schema_version != self.SCHEMA_VERSION:
-            raise ValueError(f"Schema version mismatch: expected {self.SCHEMA_VERSION}, got {schema_version}")
+        schema_version = world_data.get("schema_version", 1)
+        if schema_version != self.SCHEMA_VERSION and schema_version < 2:
+            # Для старых версий схемы используем совместимость
+            pass
         
         # Восстановление тика
         self.tick = world_data["tick"]
+        
+        # Восстановление статистики поколений (если есть)
+        if "generation_stats" in world_data:
+            self.generation_stats = world_data["generation_stats"]
         
         # Восстановление еды
         self.foods = []
@@ -205,8 +284,13 @@ class World:
         # Восстановление агентов
         Agent.next_id = 0  # Сброс счетчика ID
         for agent_data in world_data["agents"]:
-            # Восстанавливаем геном
-            genome = Genome(genes=agent_data["genome_genes"].copy(), tag=agent_data["genome_tag"])
+            # Восстанавливаем геном с новыми полями
+            genome = Genome(
+                genes=agent_data["genome_genes"].copy(),
+                tag=agent_data["genome_tag"],
+                tribal_tags=agent_data.get("genome_tribal_tags", []),
+                n_hidden=agent_data.get("genome_n_hidden", None),
+            )
             
             # Создаем агента
             pos = np.array(agent_data["pos"], dtype=np.float32)
@@ -228,19 +312,7 @@ class World:
             agent.nearest_food = None
             agent.nearest_agent = None
             
-            # Восстанавливаем гормоны
-            h_data = agent_data["hormones"]
-            agent.hormones = Hormones.__new__(Hormones)
-            agent.hormones.D = float(h_data["D"])
-            agent.hormones.S = float(h_data["S"])
-            agent.hormones.O = float(h_data["O"])
-            agent.hormones.C = float(h_data["C"])
-            agent.hormones.T = float(h_data["T"])
-            agent.hormones.allostatic = float(h_data["allostatic"])
-            agent.hormones.depression = float(h_data["depression"])
-            agent.hormones.breakdown = float(h_data["breakdown"])
-            
-            # Восстанавливаем мозг
+            # Восстанавливаем мозг с правильным n_hidden
             brain_idx = agent_data["brain_idx"]
             agent.brain = Brain.__new__(Brain)
             agent.brain.W = brain_data[f"agent_{brain_idx}_W"]
@@ -261,6 +333,27 @@ class World:
             agent.brain.threshold_base = genome["threshold"]
             agent.brain.stdp_rate = genome["stdp_rate"]
             agent.brain.max_w = genome["weight_max"]
+            
+            # Восстанавливаем гормоны с новыми полями
+            h_data = agent_data["hormones"]
+            agent.hormones = Hormones.__new__(Hormones)
+            agent.hormones.D = float(h_data["D"])
+            agent.hormones.S = float(h_data["S"])
+            agent.hormones.O = float(h_data["O"])
+            agent.hormones.C = float(h_data["C"])
+            agent.hormones.T = float(h_data["T"])
+            agent.hormones.allostatic = float(h_data.get("allostatic", 0.0))
+            agent.hormones.depression = float(h_data.get("depression", 0.0))
+            agent.hormones.breakdown = float(h_data.get("breakdown", 0.0))
+            agent.hormones.D_decay = float(h_data.get("D_decay", 0.05))
+            agent.hormones.S_decay = float(h_data.get("S_decay", 0.05))
+            agent.hormones.O_decay = float(h_data.get("O_decay", 0.05))
+            agent.hormones.C_decay = float(h_data.get("C_decay", 0.05))
+            agent.hormones.T_decay = float(h_data.get("T_decay", 0.05))
+            agent.hormones.S_sensitivity = float(h_data.get("S_sensitivity", 1.0))
+            agent.hormones.O_sensitivity = float(h_data.get("O_sensitivity", 1.0))
+            agent.hormones.C_sensitivity = float(h_data.get("C_sensitivity", 1.0))
+            agent.hormones.T_sensitivity = float(h_data.get("T_sensitivity", 1.0))
             
             self.agents.append(agent)
         
