@@ -1,57 +1,45 @@
 ```
-# Build artifacts
-cpp/build/
-build/
-CMakeFiles/
-Makefile
-CTestTestfile.cmake
-Testing/
-
-# Compiled files
-*.a
-*.so
-*.dylib
-*.dll
-*.exe
-*.o
-*.obj
-*.out
-
-# Python cache
+# Python cache files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# CMake
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
+# Build directories
+build/
+dist/
+*.so
+*.dylib
+*.dll
 
-# Tests
-Testing/
+# CMake build files
+cpp/build/
 
 # Logs
 *.log
 
-# Temporary files
-*.tmp
-*.swp
-*.swo
-
-# Environment
+# Environment files
 .env
 .env.local
 *.env.*
 
-# Editors
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
+*.tmp
 
-# OS
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+
+# OS generated files
 .DS_Store
 Thumbs.db
 ```

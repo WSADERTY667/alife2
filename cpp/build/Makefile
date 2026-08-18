@@ -191,6 +191,43 @@ test_math_utils/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/build
 .PHONY : test_math_utils/fast
 
+#=============================================================================
+# Target rules for targets named test_genome
+
+# Build rule for target.
+test_genome: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_genome
+.PHONY : test_genome
+
+# fast build rule for target.
+test_genome/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/build
+.PHONY : test_genome/fast
+
+src/genome.o: src/genome.cpp.o
+.PHONY : src/genome.o
+
+# target to build an object file
+src/genome.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/genome.cpp.o
+.PHONY : src/genome.cpp.o
+
+src/genome.i: src/genome.cpp.i
+.PHONY : src/genome.i
+
+# target to preprocess a source file
+src/genome.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/genome.cpp.i
+.PHONY : src/genome.cpp.i
+
+src/genome.s: src/genome.cpp.s
+.PHONY : src/genome.s
+
+# target to generate assembly for a file
+src/genome.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/genome.cpp.s
+.PHONY : src/genome.cpp.s
+
 src/headless_main.o: src/headless_main.cpp.o
 .PHONY : src/headless_main.o
 
@@ -287,6 +324,30 @@ src/version.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/version.cpp.s
 .PHONY : src/version.cpp.s
 
+tests/test_genome.o: tests/test_genome.cpp.o
+.PHONY : tests/test_genome.o
+
+# target to build an object file
+tests/test_genome.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/tests/test_genome.cpp.o
+.PHONY : tests/test_genome.cpp.o
+
+tests/test_genome.i: tests/test_genome.cpp.i
+.PHONY : tests/test_genome.i
+
+# target to preprocess a source file
+tests/test_genome.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/tests/test_genome.cpp.i
+.PHONY : tests/test_genome.cpp.i
+
+tests/test_genome.s: tests/test_genome.cpp.s
+.PHONY : tests/test_genome.s
+
+# target to generate assembly for a file
+tests/test_genome.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/tests/test_genome.cpp.s
+.PHONY : tests/test_genome.cpp.s
+
 tests/test_math_utils.o: tests/test_math_utils.cpp.o
 .PHONY : tests/test_math_utils.o
 
@@ -370,9 +431,13 @@ help:
 	@echo "... test"
 	@echo "... alife_core"
 	@echo "... alife_headless"
+	@echo "... test_genome"
 	@echo "... test_math_utils"
 	@echo "... test_rng"
 	@echo "... test_version"
+	@echo "... src/genome.o"
+	@echo "... src/genome.i"
+	@echo "... src/genome.s"
 	@echo "... src/headless_main.o"
 	@echo "... src/headless_main.i"
 	@echo "... src/headless_main.s"
@@ -385,6 +450,9 @@ help:
 	@echo "... src/version.o"
 	@echo "... src/version.i"
 	@echo "... src/version.s"
+	@echo "... tests/test_genome.o"
+	@echo "... tests/test_genome.i"
+	@echo "... tests/test_genome.s"
 	@echo "... tests/test_math_utils.o"
 	@echo "... tests/test_math_utils.i"
 	@echo "... tests/test_math_utils.s"
