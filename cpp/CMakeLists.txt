@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(alife_core STATIC
     src/version.cpp
     src/rng.cpp
+    src/math_utils.cpp
 )
 
 target_include_directories(alife_core PUBLIC
@@ -31,3 +32,7 @@ target_link_libraries(test_rng PRIVATE alife_core)
 
 add_test(NAME test_version COMMAND test_version)
 add_test(NAME test_rng COMMAND test_rng)
+
+add_executable(test_math_utils tests/test_math_utils.cpp)
+target_link_libraries(test_math_utils PRIVATE alife_core)
+add_test(NAME test_math_utils COMMAND test_math_utils)

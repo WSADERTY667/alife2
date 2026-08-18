@@ -178,6 +178,19 @@ test_rng/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/build
 .PHONY : test_rng/fast
 
+#=============================================================================
+# Target rules for targets named test_math_utils
+
+# Build rule for target.
+test_math_utils: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_math_utils
+.PHONY : test_math_utils
+
+# fast build rule for target.
+test_math_utils/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/build
+.PHONY : test_math_utils/fast
+
 src/headless_main.o: src/headless_main.cpp.o
 .PHONY : src/headless_main.o
 
@@ -201,6 +214,30 @@ src/headless_main.s: src/headless_main.cpp.s
 src/headless_main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_headless.dir/build.make CMakeFiles/alife_headless.dir/src/headless_main.cpp.s
 .PHONY : src/headless_main.cpp.s
+
+src/math_utils.o: src/math_utils.cpp.o
+.PHONY : src/math_utils.o
+
+# target to build an object file
+src/math_utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/math_utils.cpp.o
+.PHONY : src/math_utils.cpp.o
+
+src/math_utils.i: src/math_utils.cpp.i
+.PHONY : src/math_utils.i
+
+# target to preprocess a source file
+src/math_utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/math_utils.cpp.i
+.PHONY : src/math_utils.cpp.i
+
+src/math_utils.s: src/math_utils.cpp.s
+.PHONY : src/math_utils.s
+
+# target to generate assembly for a file
+src/math_utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/math_utils.cpp.s
+.PHONY : src/math_utils.cpp.s
 
 src/rng.o: src/rng.cpp.o
 .PHONY : src/rng.o
@@ -249,6 +286,30 @@ src/version.s: src/version.cpp.s
 src/version.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/version.cpp.s
 .PHONY : src/version.cpp.s
+
+tests/test_math_utils.o: tests/test_math_utils.cpp.o
+.PHONY : tests/test_math_utils.o
+
+# target to build an object file
+tests/test_math_utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/tests/test_math_utils.cpp.o
+.PHONY : tests/test_math_utils.cpp.o
+
+tests/test_math_utils.i: tests/test_math_utils.cpp.i
+.PHONY : tests/test_math_utils.i
+
+# target to preprocess a source file
+tests/test_math_utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/tests/test_math_utils.cpp.i
+.PHONY : tests/test_math_utils.cpp.i
+
+tests/test_math_utils.s: tests/test_math_utils.cpp.s
+.PHONY : tests/test_math_utils.s
+
+# target to generate assembly for a file
+tests/test_math_utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/tests/test_math_utils.cpp.s
+.PHONY : tests/test_math_utils.cpp.s
 
 tests/test_rng.o: tests/test_rng.cpp.o
 .PHONY : tests/test_rng.o
@@ -309,17 +370,24 @@ help:
 	@echo "... test"
 	@echo "... alife_core"
 	@echo "... alife_headless"
+	@echo "... test_math_utils"
 	@echo "... test_rng"
 	@echo "... test_version"
 	@echo "... src/headless_main.o"
 	@echo "... src/headless_main.i"
 	@echo "... src/headless_main.s"
+	@echo "... src/math_utils.o"
+	@echo "... src/math_utils.i"
+	@echo "... src/math_utils.s"
 	@echo "... src/rng.o"
 	@echo "... src/rng.i"
 	@echo "... src/rng.s"
 	@echo "... src/version.o"
 	@echo "... src/version.i"
 	@echo "... src/version.s"
+	@echo "... tests/test_math_utils.o"
+	@echo "... tests/test_math_utils.i"
+	@echo "... tests/test_math_utils.s"
 	@echo "... tests/test_rng.o"
 	@echo "... tests/test_rng.i"
 	@echo "... tests/test_rng.s"
