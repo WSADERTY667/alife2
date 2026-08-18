@@ -1,10 +1,10 @@
-Start testing: Aug 18 19:50 UTC
+Start testing: Aug 18 20:45 UTC
 ----------------------------------------------------------
-1/1 Testing: test_version
-1/1 Test: test_version
+1/2 Testing: test_version
+1/2 Test: test_version
 Command: "/workspace/cpp/build/test_version"
 Directory: /workspace/cpp/build
-"test_version" start time: Aug 18 19:50 UTC
+"test_version" start time: Aug 18 20:45 UTC
 Output:
 ----------------------------------------------------------
 PASS: version = 0.1.0
@@ -12,8 +12,82 @@ PASS: version = 0.1.0
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"test_version" end time: Aug 18 19:50 UTC
+"test_version" end time: Aug 18 20:45 UTC
 "test_version" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Aug 18 19:50 UTC
+2/2 Testing: test_rng
+2/2 Test: test_rng
+Command: "/workspace/cpp/build/test_rng"
+Directory: /workspace/cpp/build
+"test_rng" start time: Aug 18 20:45 UTC
+Output:
+----------------------------------------------------------
+=== RNG Tests ===
+
+--- Golden Value Tests ---
+Running test_seed42_next_int... PASSED
+Running test_seed42_next_float... PASSED
+Running test_seed123_next_int... PASSED
+Running test_seed123_next_float... PASSED
+Running test_seed2026_next_int... PASSED
+Running test_seed2026_next_float... PASSED
+
+--- Determinism Tests ---
+Running test_same_seed_same_sequence... PASSED
+Running test_zero_seed... PASSED
+Running test_negative_seed... PASSED
+Running test_large_seed... PASSED
+
+--- next_int Tests ---
+Running test_next_int_range... PASSED
+
+--- next_float Tests ---
+Running test_next_float_range... PASSED
+
+--- randint Tests ---
+Running test_randint_range... PASSED
+Running test_randint_single_value... PASSED
+Running test_randint_invalid_range... PASSED
+
+--- choice Tests ---
+Running test_choice_from_vector... PASSED
+Running test_choice_from_string... PASSED
+Running test_choice_empty_vector... PASSED
+Running test_choice_deterministic... PASSED
+
+--- gauss Tests ---
+Running test_gauss_returns_finite... PASSED
+Running test_gauss_mean_approximation... PASSED
+Running test_gauss_invalid_sigma... PASSED
+Running test_gauss_deterministic... PASSED
+
+--- shuffle Tests ---
+Running test_shuffle_preserves_elements... PASSED
+Running test_shuffle_deterministic... PASSED
+Running test_shuffle_empty_list... PASSED
+Running test_shuffle_single_element... PASSED
+
+--- copy Tests ---
+Running test_copy_same_state... PASSED
+Running test_copy_independent... PASSED
+
+--- get_state/set_state Tests ---
+Running test_get_set_state... PASSED
+
+--- uniform Tests ---
+Running test_uniform_range... PASSED
+Running test_uniform_deterministic... PASSED
+
+=== Test Summary ===
+Passed: 32
+Failed: 0
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_rng" end time: Aug 18 20:45 UTC
+"test_rng" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 18 20:45 UTC

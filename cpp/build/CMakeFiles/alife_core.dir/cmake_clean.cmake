@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/alife_core.dir/src/rng.cpp.o"
+  "CMakeFiles/alife_core.dir/src/rng.cpp.o.d"
   "CMakeFiles/alife_core.dir/src/version.cpp.o"
   "CMakeFiles/alife_core.dir/src/version.cpp.o.d"
   "libalife_core.a"

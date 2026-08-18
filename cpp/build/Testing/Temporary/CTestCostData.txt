@@ -1,2 +1,3 @@
-test_version 1 0.00167346
+test_version 2 0.000920225
+test_rng 1 0.00204075
 ---
