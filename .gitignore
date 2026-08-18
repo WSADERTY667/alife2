@@ -11,25 +11,15 @@ venv/
 env/
 .env
 .env.local
-*.env.*
+.env.*
 
-# Logs
+# Logs and temp files
 *.log
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
 *.tmp
 
-# Build artifacts
-build/
-dist/
-*.egg-info/
-.coverage
-coverage/
-htmlcov/
+# Editors
+.vscode/
+.idea/
 
 # OS
 .DS_Store

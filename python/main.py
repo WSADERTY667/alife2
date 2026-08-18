@@ -2,6 +2,7 @@
 # main.py - точка входа в симуляцию ALife MVP
 import argparse
 import time
+import json
 import numpy as np
 import random
 
@@ -92,16 +93,38 @@ def run_headless(ticks, agents, food, hidden_neurons, seed, out):
     print(f"Total deaths: {total_deaths}")
     print(f"Total simulation time: {end_time - start_time:.2f} s")
     
-    # Вывод результатов в файл если указан --out (заглушка / базовая реализация)
+    # Вывод результатов в JSON файл если указан --out
     if out is not None:
+        result = {
+            "seed": seed,
+            "ticks": ticks,
+            "agent_count": final_agents,
+            "births": total_births,
+            "deaths": total_deaths,
+            "avg_generation": avg_generation,
+            "food_count": len(world.foods),
+            "agents": [
+                {
+                    "id": a.id,
+                    "generation": a.generation,
+                    "x": float(a.pos[0]),
+                    "y": float(a.pos[1]),
+                    "energy": float(a.energy),
+                    "hormones": {
+                        "D": float(a.hormones.D),
+                        "S": float(a.hormones.S),
+                        "O": float(a.hormones.O),
+                        "C": float(a.hormones.C),
+                        "T": float(a.hormones.T),
+                    },
+                    "depression": float(a.hormones.depression),
+                    "breakdown": float(a.hormones.breakdown),
+                }
+                for a in world.agents
+            ],
+        }
         with open(out, 'w') as f:
-            f.write(f"Ticks completed: {ticks}\n")
-            f.write(f"Average tick time: {avg_tick_time*1000:.3f} ms\n")
-            f.write(f"Final agent count: {final_agents}\n")
-            f.write(f"Average generation: {avg_generation:.2f}\n")
-            f.write(f"Total births: {total_births}\n")
-            f.write(f"Total deaths: {total_deaths}\n")
-            f.write(f"Total simulation time: {end_time - start_time:.2f} s\n")
+            json.dump(result, f, indent=2)
         print(f"Results written to: {out}")
 
 
