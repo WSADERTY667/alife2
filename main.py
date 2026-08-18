@@ -1,13 +1,112 @@
 #!/usr/bin/env python3
 # main.py - точка входа в симуляцию ALife MVP
-import pygame
+import argparse
+import time
 import numpy as np
-from alife.config import SCREEN_W, SCREEN_H, WORLD_H, FPS
-from alife.world import World
-from alife.render import draw, get_agent_by_id
+
+
+def run_headless(ticks, agents, food, hidden_neurons):
+    """Запуск симуляции в headless-режиме."""
+    from alife.config import WORLD_W, WORLD_H
+    from alife.world import World
+    import random
+    
+    # Настройка начальных параметров
+    original_agent_count = None
+    original_food_max = None
+    
+    if agents is not None or food is not None or hidden_neurons is not None:
+        from alife import config
+        if agents is not None:
+            original_agent_count = config.AGENT_COUNT
+            config.AGENT_COUNT = agents
+        if food is not None:
+            original_food_max = config.FOOD_MAX
+            config.FOOD_MAX = food
+        if hidden_neurons is not None:
+            original_hidden = config.N_HIDDEN
+            config.N_HIDDEN = hidden_neurons
+            # Пересчитать TOTAL_NEURONS
+            config.TOTAL_NEURONS = config.INPUT_SIZE + config.N_HIDDEN + config.OUTPUT_SIZE
+    
+    world = World()
+    
+    # Восстановить оригинальные значения если они были изменены
+    if original_agent_count is not None:
+        config.AGENT_COUNT = original_agent_count
+    if original_food_max is not None:
+        config.FOOD_MAX = original_food_max
+    if hidden_neurons is not None:
+        config.N_HIDDEN = original_hidden
+        config.TOTAL_NEURONS = config.INPUT_SIZE + config.N_HIDDEN + config.OUTPUT_SIZE
+    
+    # Статистика
+    start_time = time.time()
+    tick_times = []
+    total_births = 0
+    total_deaths = 0
+    initial_agents = len(world.agents)
+    
+    for t in range(ticks):
+        tick_start = time.time()
+        prev_count = len(world.agents)
+        world.update()
+        curr_count = len(world.agents)
+        
+        # Подсчет рождений и смертей
+        births = len(world.newborns)
+        deaths = prev_count - (curr_count - births)
+        if deaths < 0:
+            deaths = 0
+        total_births += births
+        total_deaths += deaths
+        
+        tick_end = time.time()
+        tick_times.append(tick_end - tick_start)
+        
+        # Проверка на NaN в мозгах всех агентов
+        for a in world.agents:
+            if np.any(np.isnan(a.brain.W)):
+                raise RuntimeError(f"NaN detected in brain weights at tick {t}, agent {a.id}")
+            if np.any(np.isnan(a.brain.v)):
+                raise RuntimeError(f"NaN detected in brain voltages at tick {t}, agent {a.id}")
+    
+    end_time = time.time()
+    
+    # Вычисление статистики
+    avg_tick_time = sum(tick_times) / len(tick_times) if tick_times else 0.0
+    final_agents = len(world.agents)
+    avg_generation = sum(a.generation for a in world.agents) / final_agents if final_agents > 0 else 0.0
+    
+    print(f"=== Headless Simulation Results ===")
+    print(f"Ticks completed: {ticks}")
+    print(f"Average tick time: {avg_tick_time*1000:.3f} ms")
+    print(f"Final agent count: {final_agents}")
+    print(f"Average generation: {avg_generation:.2f}")
+    print(f"Total births: {total_births}")
+    print(f"Total deaths: {total_deaths}")
+    print(f"Total simulation time: {end_time - start_time:.2f} s")
 
 
 def main():
+    parser = argparse.ArgumentParser(description="ALife MVP Simulation")
+    parser.add_argument("--headless", action="store_true", help="Run without Pygame display")
+    parser.add_argument("--ticks", type=int, default=1000, help="Number of ticks for headless mode")
+    parser.add_argument("--agents", type=int, default=None, help="Initial number of agents")
+    parser.add_argument("--food", type=int, default=None, help="Initial/max number of food items")
+    parser.add_argument("--hidden-neurons", type=int, default=None, help="Number of hidden neurons")
+    args = parser.parse_args()
+    
+    if args.headless:
+        run_headless(args.ticks, args.agents, args.food, args.hidden_neurons)
+        return
+    
+    # Visual mode (original behavior)
+    import pygame
+    from alife.config import SCREEN_W, SCREEN_H, WORLD_H, FPS
+    from alife.world import World
+    from alife.render import draw, get_agent_by_id
+    
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
     pygame.display.set_caption("ALife MVP: SNN + Genome + Hormones")
