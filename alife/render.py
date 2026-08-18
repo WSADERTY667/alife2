@@ -53,6 +53,15 @@ def draw_panel(screen, world, font, selected):
         f"tribe tag: {selected.genome.tag}  aggression: {eff['aggression']:.2f}  sociality: {eff['sociality']:.2f}",
         (170, 190, 220),
     )
+    y += 24
+    # Расшифровка показателей
+    draw_text(screen, font, 10, y, "[Гормоны] D=дофамин(мотивация), S=серотонин(стабильность),", (150, 150, 160))
+    y += 16
+    draw_text(screen, font, 10, y, "O=окситоцин(социальность), C=кортизол(стресс), T=тестостерон(агрессия)", (150, 150, 160))
+    y += 16
+    draw_text(screen, font, 10, y, "[Состояния] аллостаз=хронич.стресс, депрессия=уровень подавленности", (150, 150, 160))
+    y += 16
+    draw_text(screen, font, 10, y, "[Социум] tribe=племя(цвет), aggression=склонность к атаке, sociality=общительность", (150, 150, 160))
 
 
 def draw(screen, world, font, selected):
