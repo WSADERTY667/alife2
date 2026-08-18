@@ -16,6 +16,8 @@ class World:
     
     def __init__(self, rng=None):
         self.rng = rng if rng is not None else RNG(seed=42)
+        # Сбрасываем счетчик ID агентов для детерминированности
+        Agent.next_id = 1
         self.agents = []
         self.foods = []
         self.tick = 0
@@ -30,6 +32,8 @@ class World:
             self.spawn_food()
         for _ in range(AGENT_COUNT):
             self.spawn_random_agent()
+        # Сортируем агентов для детерминированного порядка обновления
+        self.agents.sort(key=lambda a: a.id)
 
     def spawn_food(self):
         pos = np.array(
@@ -120,6 +124,8 @@ class World:
     def update(self):
         self.tick += 1
         self.newborns = []
+        # Сортируем агентов по ID для детерминированного порядка обновления
+        self.agents.sort(key=lambda a: a.id)
         if len(self.foods) < FOOD_MAX and self.rng.next_float() < FOOD_RESPAWN:
             self.spawn_food()
         for a in self.agents:
@@ -129,11 +135,16 @@ class World:
             if a.alive:
                 a.update(self, 1.0)
         self.foods = [f for f in self.foods if not f["eaten"]]
+        # Добавляем новорождённых после обновления всех агентов
         self.agents.extend(self.newborns)
+        # Фильтруем мёртвых агентов
         self.agents = [a for a in self.agents if a.alive]
+        # Защита от вымирания: спавним новых агентов если их меньше MIN_AGENTS
         if len(self.agents) < MIN_AGENTS:
             for _ in range(MIN_AGENTS - len(self.agents)):
                 self.spawn_random_agent()
+            # Сортируем после добавления новых агентов
+            self.agents.sort(key=lambda a: a.id)
         
         # Обновляем статистику поколений каждые 100 тиков
         if self.tick % 100 == 0:
