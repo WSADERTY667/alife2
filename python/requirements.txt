@@ -1,0 +1,6 @@
+numpy
+pygame
+pytest
+ruff
+black
+mypy
