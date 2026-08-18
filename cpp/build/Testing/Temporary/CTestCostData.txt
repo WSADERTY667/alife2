@@ -1,3 +1,4 @@
-test_version 2 0.000920225
-test_rng 1 0.00204075
+test_version 1 0.00190902
+test_rng 1 0.00194504
+test_math_utils 1 0.00149678
 ---
