@@ -1,7 +1,6 @@
 # agent.py
 # Класс агента
 import math
-import random
 import numpy as np
 from .config import (
     START_ENERGY, MATURE_AGE, REPRODUCE_COOLDOWN, MAX_ENERGY, REPRO_ENERGY,
@@ -15,25 +14,27 @@ from .utils import normalize_angle, wall_front_sensor
 from .genome import Genome, genome_similarity
 from .hormones import Hormones
 from .brain import Brain
+from .rng import RNG
 
 
 class Agent:
     next_id = 1
 
-    def __init__(self, pos, genome, generation=0, parent_weights=None):
+    def __init__(self, pos, genome, generation=0, parent_weights=None, rng=None):
         self.id = Agent.next_id
         Agent.next_id += 1
         self.pos = np.array(pos, dtype=np.float32)
-        self.angle = random.uniform(-math.pi, math.pi)
+        self.rng = rng if rng is not None else RNG(seed=42)
+        self.angle = self.rng.uniform(-math.pi, math.pi)
         self.genome = genome
         # Передаем n_hidden из генома в мозг
-        self.brain = Brain(genome, genome.n_hidden if hasattr(genome, 'n_hidden') else None, parent_weights)
+        self.brain = Brain(genome, genome.n_hidden if hasattr(genome, 'n_hidden') else None, parent_weights, rng=self.rng)
         self.hormones = Hormones(genome)
         self.energy = START_ENERGY
         self.age = 0.0
         self.generation = generation
         self.alive = True
-        self.repro_cooldown = REPRODUCE_COOLDOWN * random.uniform(0.3, 0.8)
+        self.repro_cooldown = REPRODUCE_COOLDOWN * self.rng.uniform(0.3, 0.8)
         self.last_pain = 0.0
         self.pending_reward = 0.0
         self.pending_punishment = 0.0
@@ -107,11 +108,11 @@ class Agent:
         if LAMARCKIAN and self.brain.W.shape == mate.brain.W.shape:
             parent_weights = ((self.brain.W + mate.brain.W) * 0.5).astype(np.float32)
         pos = (self.pos + mate.pos) * 0.5
-        pos += np.array([random.uniform(-12.0, 12.0), random.uniform(-12.0, 12.0)], dtype=np.float32)
+        pos += np.array([self.rng.uniform(-12.0, 12.0), self.rng.uniform(-12.0, 12.0)], dtype=np.float32)
         pos[0] = clamp(pos[0], AGENT_RADIUS, 1000 - AGENT_RADIUS)
         pos[1] = clamp(pos[1], AGENT_RADIUS, 640 - AGENT_RADIUS)
         generation = max(self.generation, mate.generation) + 1
-        return Agent(pos, child_genome, generation, parent_weights)
+        return Agent(pos, child_genome, generation, parent_weights, rng=self.rng.copy())
 
     def update(self, world, dt=1.0):
         self.age += dt
@@ -136,7 +137,7 @@ class Agent:
 
         if REFLEX_ASSIST:
             if sensors[8] > 0.70:
-                reflex_turn += 0.22 * (1.0 if random.random() < 0.5 else -1.0)
+                reflex_turn += 0.22 * (1.0 if self.rng.next_float() < 0.5 else -1.0)
             food_prox = sensors[1]
             if hunger > 0.35 and food_prox > 0.05:
                 reflex_turn += 0.22 * (sensors[3] - sensors[2])
@@ -148,9 +149,9 @@ class Agent:
 
         turn = (left - right) * TURN_RATE * dt + reflex_turn * dt
         if eff["breakdown"] > 0.5:
-            turn += random.uniform(-0.5, 0.5) * dt
-        forward = clamp(forward + random.uniform(-0.2, 0.5), 0.0, 1.0)
-        attack = clamp(attack + random.uniform(0.0, 0.4), 0.0, 1.0)
+            turn += self.rng.uniform(-0.5, 0.5) * dt
+        forward = clamp(forward + self.rng.uniform(-0.2, 0.5), 0.0, 1.0)
+        attack = clamp(attack + self.rng.uniform(0.0, 0.4), 0.0, 1.0)
 
         if eff["depression"] > 0.5:
             forward *= 0.45
@@ -211,7 +212,7 @@ class Agent:
                 if REFLEX_ASSIST and hunger > 0.8:
                     attack_drive += 0.05
                 if eff["breakdown"] > 0.5:
-                    attack_drive += random.uniform(0.0, 0.3)
+                    attack_drive += self.rng.uniform(0.0, 0.3)
                 attack_drive *= 1.0 - clamp(0.65 * kin_sim * eff["sociality"], 0.0, 0.9)
                 if attack_drive > ATTACK_THRESHOLD:
                     other.energy -= ATTACK_DAMAGE
@@ -242,7 +243,7 @@ class Agent:
                 compat = 0.35 + 0.65 * kin_sim
                 mate_social = clamp(mate.hormones.O, 0.0, 1.0)
                 chance = REPRO_BASE * eff["sociality"] * compat * (0.3 + mate_social)
-                if random.random() < chance:
+                if self.rng.next_float() < chance:
                     child = self.make_child(mate)
                     world.newborns.append(child)
                     self.energy -= REPRO_COST
