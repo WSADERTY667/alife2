@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/alife_core.dir/src/genome.cpp.o"
+  "CMakeFiles/alife_core.dir/src/genome.cpp.o.d"
   "CMakeFiles/alife_core.dir/src/math_utils.cpp.o"
   "CMakeFiles/alife_core.dir/src/math_utils.cpp.o.d"
   "CMakeFiles/alife_core.dir/src/rng.cpp.o"

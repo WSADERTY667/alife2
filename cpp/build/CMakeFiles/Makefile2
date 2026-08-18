@@ -68,6 +68,7 @@ all: CMakeFiles/alife_headless.dir/all
 all: CMakeFiles/test_version.dir/all
 all: CMakeFiles/test_rng.dir/all
 all: CMakeFiles/test_math_utils.dir/all
+all: CMakeFiles/test_genome.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -80,6 +81,7 @@ clean: CMakeFiles/alife_headless.dir/clean
 clean: CMakeFiles/test_version.dir/clean
 clean: CMakeFiles/test_rng.dir/clean
 clean: CMakeFiles/test_math_utils.dir/clean
+clean: CMakeFiles/test_genome.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -89,12 +91,12 @@ clean: CMakeFiles/test_math_utils.dir/clean
 CMakeFiles/alife_core.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=1,2,3,4 "Built target alife_core"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target alife_core"
 .PHONY : CMakeFiles/alife_core.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/alife_core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/alife_core.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/alife_core.dir/rule
@@ -115,12 +117,12 @@ CMakeFiles/alife_core.dir/clean:
 CMakeFiles/alife_headless.dir/all: CMakeFiles/alife_core.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_headless.dir/build.make CMakeFiles/alife_headless.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_headless.dir/build.make CMakeFiles/alife_headless.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=5,6 "Built target alife_headless"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=6,7 "Built target alife_headless"
 .PHONY : CMakeFiles/alife_headless.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/alife_headless.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/alife_headless.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/alife_headless.dir/rule
@@ -141,12 +143,12 @@ CMakeFiles/alife_headless.dir/clean:
 CMakeFiles/test_version.dir/all: CMakeFiles/alife_core.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_version.dir/build.make CMakeFiles/test_version.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_version.dir/build.make CMakeFiles/test_version.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=11,12 "Built target test_version"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=14,15 "Built target test_version"
 .PHONY : CMakeFiles/test_version.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/test_version.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_version.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/test_version.dir/rule
@@ -167,12 +169,12 @@ CMakeFiles/test_version.dir/clean:
 CMakeFiles/test_rng.dir/all: CMakeFiles/alife_core.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_rng.dir/build.make CMakeFiles/test_rng.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=9,10 "Built target test_rng"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=12,13 "Built target test_rng"
 .PHONY : CMakeFiles/test_rng.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/test_rng.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_rng.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/test_rng.dir/rule
@@ -193,12 +195,12 @@ CMakeFiles/test_rng.dir/clean:
 CMakeFiles/test_math_utils.dir/all: CMakeFiles/alife_core.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=7,8 "Built target test_math_utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=10,11 "Built target test_math_utils"
 .PHONY : CMakeFiles/test_math_utils.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/test_math_utils.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_math_utils.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/test_math_utils.dir/rule
@@ -211,6 +213,32 @@ test_math_utils: CMakeFiles/test_math_utils.dir/rule
 CMakeFiles/test_math_utils.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_math_utils.dir/build.make CMakeFiles/test_math_utils.dir/clean
 .PHONY : CMakeFiles/test_math_utils.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_genome.dir
+
+# All Build rule for target.
+CMakeFiles/test_genome.dir/all: CMakeFiles/alife_core.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=8,9 "Built target test_genome"
+.PHONY : CMakeFiles/test_genome.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_genome.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 7
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_genome.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspace/cpp/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_genome.dir/rule
+
+# Convenience name for target.
+test_genome: CMakeFiles/test_genome.dir/rule
+.PHONY : test_genome
+
+# clean rule for target.
+CMakeFiles/test_genome.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/clean
+.PHONY : CMakeFiles/test_genome.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
