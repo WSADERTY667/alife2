@@ -206,6 +206,9 @@ class World:
                     "allostatic": float(agent.hormones.allostatic),
                     "depression": float(agent.hormones.depression),
                     "breakdown": float(agent.hormones.breakdown),
+                    "paranoia": float(agent.hormones.paranoia),
+                    "trust": float(agent.hormones.trust),
+                    "delayed_punishment": float(agent.hormones.delayed_punishment),
                     "D_decay": float(agent.hormones.D_decay),
                     "S_decay": float(agent.hormones.S_decay),
                     "O_decay": float(agent.hormones.O_decay),
@@ -215,6 +218,7 @@ class World:
                     "O_sensitivity": float(agent.hormones.O_sensitivity),
                     "C_sensitivity": float(agent.hormones.C_sensitivity),
                     "T_sensitivity": float(agent.hormones.T_sensitivity),
+                    "D_sensitivity": float(agent.hormones.D_sensitivity),
                 },
                 "brain_idx": i,
             }
@@ -345,6 +349,10 @@ class World:
             agent.hormones.allostatic = float(h_data.get("allostatic", 0.0))
             agent.hormones.depression = float(h_data.get("depression", 0.0))
             agent.hormones.breakdown = float(h_data.get("breakdown", 0.0))
+            agent.hormones.paranoia = float(h_data.get("paranoia", 0.0))
+            agent.hormones.trust = float(h_data.get("trust", 0.5))
+            agent.hormones.delayed_punishment = float(h_data.get("delayed_punishment", 0.0))
+            agent.hormones.punishment_history = []
             agent.hormones.D_decay = float(h_data.get("D_decay", 0.05))
             agent.hormones.S_decay = float(h_data.get("S_decay", 0.05))
             agent.hormones.O_decay = float(h_data.get("O_decay", 0.05))
@@ -354,6 +362,9 @@ class World:
             agent.hormones.O_sensitivity = float(h_data.get("O_sensitivity", 1.0))
             agent.hormones.C_sensitivity = float(h_data.get("C_sensitivity", 1.0))
             agent.hormones.T_sensitivity = float(h_data.get("T_sensitivity", 1.0))
+            agent.hormones.D_sensitivity = float(h_data.get("D_sensitivity", 1.0))
+            agent.hormones.stress_resilience = float(h_data.get("stress_resilience", 0.5))
+            agent.hormones.social_temperament = float(h_data.get("social_temperament", 0.5))
             
             self.agents.append(agent)
         
