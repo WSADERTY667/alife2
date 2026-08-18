@@ -82,3 +82,7 @@ See [docs/MIGRATION_AUDIT.md](docs/MIGRATION_AUDIT.md) for:
 - Missing determinism issues
 - Save/load versioning gaps
 - C++ migration risks and recommendations
+
+## C++ Build
+
+For building the C++ version of the project, see [docs/CPP_BUILD.md](docs/CPP_BUILD.md).
