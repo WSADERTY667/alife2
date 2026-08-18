@@ -5,8 +5,14 @@ from .config import INPUT_SIZE, OUTPUT_SIZE, LEARNING, SYNAPTIC_SCALE, clamp
 
 
 class Brain:
-    def __init__(self, genome, n_hidden, parent_weights=None):
-        self.n_hidden = n_hidden
+    def __init__(self, genome, n_hidden=None, parent_weights=None):
+        # Наследуемая архитектура мозга - количество скрытых нейронов из генома
+        if n_hidden is None:
+            from .config import N_HIDDEN
+            self.n_hidden = N_HIDDEN
+        else:
+            self.n_hidden = n_hidden
+        
         self.n_in = INPUT_SIZE
         self.n_out = OUTPUT_SIZE
         self.n = self.n_in + self.n_hidden + self.n_out
