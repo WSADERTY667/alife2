@@ -6,7 +6,7 @@ from .config import TAG_COLORS, clamp
 GENOME_KEYS = [
     "mutation_rate", "conn_prob", "weight_scale", "weight_max",
     "membrane_decay", "threshold", "stdp_rate", "plasticity_gain",
-    "dopamine_base", "dopamine_reactivity", "dopamine_decay",
+    "dopamine_base", "dopamine_reactivity", "dopamine_decay", "dopamine_sensitivity",
     "serotonin_base", "serotonin_decay", "serotonin_sensitivity",
     "oxytocin_base", "oxytocin_gain", "oxytocin_decay", "oxytocin_sensitivity",
     "cortisol_base", "cortisol_reactivity", "cortisol_decay", "cortisol_sensitivity",
@@ -14,6 +14,8 @@ GENOME_KEYS = [
     "aggression_gain", "social_gain",
     "lamarckian_weight", "metabolism",
     "brain_arch_mutability",  # вероятность мутации архитектуры мозга
+    "stress_resilience",  # устойчивость к стрессу
+    "social_temperament",  # социальный темперамент
 ]
 
 BOUNDS = {
@@ -28,6 +30,7 @@ BOUNDS = {
     "dopamine_base": (0.2, 1.0),
     "dopamine_reactivity": (0.1, 2.0),
     "dopamine_decay": (0.01, 0.20),
+    "dopamine_sensitivity": (0.5, 2.0),
     "serotonin_base": (0.2, 1.0),
     "serotonin_decay": (0.01, 0.20),
     "serotonin_sensitivity": (0.5, 2.0),
@@ -48,6 +51,8 @@ BOUNDS = {
     "lamarckian_weight": (0.0, 0.9),
     "metabolism": (0.01, 0.10),
     "brain_arch_mutability": (0.0, 0.15),
+    "stress_resilience": (0.1, 0.9),
+    "social_temperament": (0.1, 0.9),
 }
 
 MUT_SCALE = {
