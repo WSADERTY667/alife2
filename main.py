@@ -118,7 +118,7 @@ def main():
     sim_speed = 1
     running = True
     print("ALife MVP started.")
-    print("Space: pause | F: food | A: agent | R: reset | +/-: speed")
+    print("Space: pause | S: save | L: load | F: food | A: agent | R: reset | +/-: speed")
     print("Click agent, then T = reward, P = punish.")
     while running:
         for event in pygame.event.get():
@@ -129,6 +129,10 @@ def main():
                     running = False
                 elif event.key == pygame.K_SPACE:
                     paused = not paused
+                elif event.key == pygame.K_s:
+                    world.save()
+                elif event.key == pygame.K_l:
+                    world.load()
                 elif event.key == pygame.K_f:
                     for _ in range(10):
                         world.spawn_food()

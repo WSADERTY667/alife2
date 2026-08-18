@@ -1,13 +1,19 @@
 # world.py
 # Класс мира симуляции
 import random
+import json
 import numpy as np
-from .config import WORLD_W, WORLD_H, FOOD_MAX, FOOD_RESPAWN, AGENT_COUNT, MIN_AGENTS
+from pathlib import Path
+from .config import WORLD_W, WORLD_H, FOOD_MAX, FOOD_RESPAWN, AGENT_COUNT, MIN_AGENTS, INPUT_SIZE, OUTPUT_SIZE
 from .genome import Genome, genome_similarity
 from .agent import Agent
+from .hormones import Hormones
+from .brain import Brain
 
 
 class World:
+    SCHEMA_VERSION = 1
+    
     def __init__(self):
         self.agents = []
         self.foods = []
@@ -86,3 +92,178 @@ class World:
         if len(self.agents) < MIN_AGENTS:
             for _ in range(MIN_AGENTS - len(self.agents)):
                 self.spawn_random_agent()
+
+    def save(self, path="save_world"):
+        """Сохранить мир в JSON + NPZ файлы."""
+        path = Path(path)
+        json_path = path.with_suffix(".json") if not path.suffix else path
+        npz_path = json_path.with_suffix(".npz")
+        
+        # Данные для JSON
+        world_data = {
+            "schema_version": self.SCHEMA_VERSION,
+            "tick": self.tick,
+            "foods": [
+                {
+                    "pos": f["pos"].tolist(),
+                    "nutrition": float(f["nutrition"]),
+                    "eaten": f["eaten"],
+                }
+                for f in self.foods
+            ],
+            "agents": [],
+        }
+        
+        # Данные для NPZ (веса мозгов)
+        brain_weights = {}
+        
+        for i, agent in enumerate(self.agents):
+            agent_data = {
+                "id": agent.id,
+                "generation": agent.generation,
+                "age": float(agent.age),
+                "energy": float(agent.energy),
+                "pos": agent.pos.tolist(),
+                "angle": float(agent.angle),
+                "repro_cooldown": float(agent.repro_cooldown),
+                "last_pain": float(agent.last_pain),
+                "pending_reward": float(agent.pending_reward),
+                "pending_punishment": float(agent.pending_punishment),
+                "alive": agent.alive,
+                "genome_genes": agent.genome.genes.copy(),
+                "genome_tag": agent.genome.tag,
+                "hormones": {
+                    "D": float(agent.hormones.D),
+                    "S": float(agent.hormones.S),
+                    "O": float(agent.hormones.O),
+                    "C": float(agent.hormones.C),
+                    "T": float(agent.hormones.T),
+                    "allostatic": float(agent.hormones.allostatic),
+                    "depression": float(agent.hormones.depression),
+                    "breakdown": float(agent.hormones.breakdown),
+                },
+                "brain_idx": i,
+            }
+            world_data["agents"].append(agent_data)
+            
+            # Сохраняем веса мозга
+            brain_weights[f"agent_{i}_W"] = agent.brain.W
+            
+            # Дополнительные данные мозга для восстановления состояния
+            brain_weights[f"agent_{i}_mask"] = agent.brain.mask.astype(np.int8)
+            brain_weights[f"agent_{i}_v"] = agent.brain.v
+            brain_weights[f"agent_{i}_spikes"] = agent.brain.spikes
+            brain_weights[f"agent_{i}_out_rate"] = agent.brain.out_rate
+            brain_weights[f"agent_{i}_E"] = agent.brain.E if agent.brain.E is not None else np.zeros(1)
+            brain_weights[f"agent_{i}_n_hidden"] = agent.brain.n_hidden
+        
+        with open(json_path, "w") as f:
+            json.dump(world_data, f, indent=2)
+        
+        np.savez_compressed(npz_path, **brain_weights)
+        
+        print(f"World saved: {json_path}, {npz_path}")
+        return json_path, npz_path
+
+    def load(self, path="save_world"):
+        """Загрузить мир из JSON + NPZ файлов."""
+        path = Path(path)
+        json_path = path.with_suffix(".json") if not path.suffix else path
+        npz_path = json_path.with_suffix(".npz")
+        
+        if not json_path.exists():
+            raise FileNotFoundError(f"JSON file not found: {json_path}")
+        if not npz_path.exists():
+            raise FileNotFoundError(f"NPZ file not found: {npz_path}")
+        
+        with open(json_path, "r") as f:
+            world_data = json.load(f)
+        
+        brain_data = np.load(npz_path)
+        
+        # Проверка версии схемы
+        schema_version = world_data.get("schema_version", 0)
+        if schema_version != self.SCHEMA_VERSION:
+            raise ValueError(f"Schema version mismatch: expected {self.SCHEMA_VERSION}, got {schema_version}")
+        
+        # Восстановление тика
+        self.tick = world_data["tick"]
+        
+        # Восстановление еды
+        self.foods = []
+        for f_data in world_data["foods"]:
+            self.foods.append({
+                "pos": np.array(f_data["pos"], dtype=np.float32),
+                "nutrition": float(f_data["nutrition"]),
+                "eaten": f_data["eaten"],
+            })
+        
+        # Сброс агентов
+        self.agents = []
+        self.newborns = []
+        
+        # Восстановление агентов
+        Agent.next_id = 0  # Сброс счетчика ID
+        for agent_data in world_data["agents"]:
+            # Восстанавливаем геном
+            genome = Genome(genes=agent_data["genome_genes"].copy(), tag=agent_data["genome_tag"])
+            
+            # Создаем агента
+            pos = np.array(agent_data["pos"], dtype=np.float32)
+            agent = Agent.__new__(Agent)
+            agent.id = agent_data["id"]
+            if agent.id >= Agent.next_id:
+                Agent.next_id = agent.id + 1
+            agent.pos = pos
+            agent.angle = float(agent_data["angle"])
+            agent.genome = genome
+            agent.energy = float(agent_data["energy"])
+            agent.age = float(agent_data["age"])
+            agent.generation = agent_data["generation"]
+            agent.alive = agent_data["alive"]
+            agent.repro_cooldown = float(agent_data["repro_cooldown"])
+            agent.last_pain = float(agent_data["last_pain"])
+            agent.pending_reward = float(agent_data["pending_reward"])
+            agent.pending_punishment = float(agent_data["pending_punishment"])
+            agent.nearest_food = None
+            agent.nearest_agent = None
+            
+            # Восстанавливаем гормоны
+            h_data = agent_data["hormones"]
+            agent.hormones = Hormones.__new__(Hormones)
+            agent.hormones.D = float(h_data["D"])
+            agent.hormones.S = float(h_data["S"])
+            agent.hormones.O = float(h_data["O"])
+            agent.hormones.C = float(h_data["C"])
+            agent.hormones.T = float(h_data["T"])
+            agent.hormones.allostatic = float(h_data["allostatic"])
+            agent.hormones.depression = float(h_data["depression"])
+            agent.hormones.breakdown = float(h_data["breakdown"])
+            
+            # Восстанавливаем мозг
+            brain_idx = agent_data["brain_idx"]
+            agent.brain = Brain.__new__(Brain)
+            agent.brain.W = brain_data[f"agent_{brain_idx}_W"]
+            agent.brain.mask = brain_data[f"agent_{brain_idx}_mask"].astype(bool)
+            agent.brain.v = brain_data[f"agent_{brain_idx}_v"]
+            agent.brain.spikes = brain_data[f"agent_{brain_idx}_spikes"]
+            agent.brain.out_rate = brain_data[f"agent_{brain_idx}_out_rate"]
+            E_data = brain_data[f"agent_{brain_idx}_E"]
+            agent.brain.E = E_data if E_data.size > 1 else None
+            agent.brain.n_hidden = int(brain_data[f"agent_{brain_idx}_n_hidden"])
+            agent.brain.n_in = INPUT_SIZE
+            agent.brain.n_out = OUTPUT_SIZE
+            agent.brain.n = agent.brain.n_in + agent.brain.n_hidden + agent.brain.n_out
+            agent.brain.hidden_slice = slice(agent.brain.n_in, agent.brain.n)
+            
+            # Восстанавливаем параметры мозга из генома
+            agent.brain.decay_base = genome["membrane_decay"]
+            agent.brain.threshold_base = genome["threshold"]
+            agent.brain.stdp_rate = genome["stdp_rate"]
+            agent.brain.max_w = genome["weight_max"]
+            
+            self.agents.append(agent)
+        
+        print(f"World loaded: {json_path}, {npz_path}")
+        print(f"Loaded tick: {self.tick}, agents: {len(self.agents)}, foods: {len(self.foods)}")
+        return True
