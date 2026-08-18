@@ -57,6 +57,19 @@ class RNG:
         """
         return self.next_int() / (self.MASK32 + 1)
     
+    def uniform(self, a: float, b: float) -> float:
+        """
+        Вернуть случайное число с плавающей точкой в диапазоне [a, b].
+        
+        Args:
+            a: Нижняя граница (включительно).
+            b: Верхняя граница (включительно).
+            
+        Returns:
+            Случайное float значение от a до b включительно.
+        """
+        return a + self.next_float() * (b - a)
+    
     def randint(self, a: int, b: int) -> int:
         """
         Вернуть случайное целое число в диапазоне [a, b] (оба конца включены).

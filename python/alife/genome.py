@@ -1,7 +1,8 @@
 # genome.py
 # Геном агента и генетические операции
-import random
+from typing import Optional
 from .config import TAG_COLORS, clamp
+from .rng import RNG
 
 GENOME_KEYS = [
     "mutation_rate", "conn_prob", "weight_scale", "weight_max",
@@ -70,15 +71,17 @@ KIN_KEYS = [
 
 
 class Genome:
-    def __init__(self, genes=None, tag=None, tribal_tags=None, n_hidden=None):
+    def __init__(self, genes=None, tag=None, tribal_tags=None, n_hidden=None, rng: Optional[RNG] = None):
+        self._rng = rng if rng is not None else RNG()
+        
         if genes is None:
             genes = {
-                k: random.uniform(BOUNDS[k][0], BOUNDS[k][1])
+                k: self._rng.uniform(BOUNDS[k][0], BOUNDS[k][1])
                 for k in GENOME_KEYS
             }
         self.genes = genes
         if tag is None:
-            self.tag = random.randint(0, len(TAG_COLORS) - 1)
+            self.tag = self._rng.randint(0, len(TAG_COLORS) - 1)
         else:
             self.tag = tag
         
@@ -101,54 +104,56 @@ class Genome:
     def get(self, key, default=None):
         return self.genes.get(key, default)
 
-    def mutate(self):
+    def mutate(self, rng: Optional[RNG] = None):
+        r = rng if rng is not None else self._rng
         mr = clamp(self.genes.get("mutation_rate", 0.08), 0.0, 0.5)
         for k in GENOME_KEYS:
-            if random.random() < mr:
+            if r.next_float() < mr:
                 self.genes[k] = clamp(
-                    self.genes[k] + random.gauss(0.0, MUT_SCALE[k]),
+                    self.genes[k] + r.gauss(0.0, MUT_SCALE[k]),
                     BOUNDS[k][0], BOUNDS[k][1],
                 )
-        if random.random() < mr * 0.35:
-            self.tag = random.randint(0, len(TAG_COLORS) - 1)
+        if r.next_float() < mr * 0.35:
+            self.tag = r.randint(0, len(TAG_COLORS) - 1)
         
         # Мутация архитектуры мозга (изменение количества скрытых нейронов)
         arch_mut = clamp(self.genes.get("brain_arch_mutability", 0.05), 0.0, 0.5)
-        if random.random() < arch_mut:
-            delta = random.choice([-8, -4, 4, 8])
+        if r.next_float() < arch_mut:
+            delta = r.choice([-8, -4, 4, 8])
             self.n_hidden = max(40, min(400, self.n_hidden + delta))
         
         # Мутация племенных тегов - редкое добавление нового тега
-        if random.random() < mr * 0.05:
-            new_tag = f"mut_{random.randint(1000, 9999)}"
+        if r.next_float() < mr * 0.05:
+            new_tag = f"mut_{r.randint(1000, 9999)}"
             if new_tag not in self.tribal_tags:
                 self.tribal_tags.append(new_tag)
                 if len(self.tribal_tags) > 5:
                     self.tribal_tags.pop(0)
 
     @staticmethod
-    def crossover(a, b):
+    def crossover(a, b, rng: Optional[RNG] = None):
+        r = rng if rng is not None else RNG()
         genes = {}
         for k in GENOME_KEYS:
-            r = random.random()
-            if r < 0.45:
+            rv = r.next_float()
+            if rv < 0.45:
                 v = a[k]
-            elif r < 0.90:
+            elif rv < 0.90:
                 v = b[k]
             else:
                 v = (a[k] + b[k]) * 0.5
             genes[k] = v
         
-        tag = a.tag if random.random() < 0.5 else b.tag
+        tag = a.tag if r.next_float() < 0.5 else b.tag
         
         # Наследование племенных тегов - комбинация от обоих родителей
         tribal_tags = list(set(a.tribal_tags + b.tribal_tags))[:5]
         
         # Наследование архитектуры мозга - среднее с небольшой вариацией
         n_hidden = int((a.n_hidden + b.n_hidden) / 2)
-        n_hidden = max(40, min(400, n_hidden + random.choice([-4, 0, 0, 0, 4])))
+        n_hidden = max(40, min(400, n_hidden + r.choice([-4, 0, 0, 0, 4])))
         
-        return Genome(genes, tag, tribal_tags, n_hidden)
+        return Genome(genes, tag, tribal_tags, n_hidden, rng=r)
 
 
 def genome_similarity(g1, g2):
