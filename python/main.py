@@ -3,13 +3,18 @@
 import argparse
 import time
 import numpy as np
+import random
 
 
-def run_headless(ticks, agents, food, hidden_neurons):
+def run_headless(ticks, agents, food, hidden_neurons, seed, out):
     """Запуск симуляции в headless-режиме."""
     from alife.config import WORLD_W, WORLD_H
     from alife.world import World
-    import random
+    
+    # Установка seed для воспроизводимости (заглушка / базовая реализация)
+    if seed is not None:
+        random.seed(seed)
+        np.random.seed(seed)
     
     # Настройка начальных параметров
     original_agent_count = None
@@ -86,19 +91,33 @@ def run_headless(ticks, agents, food, hidden_neurons):
     print(f"Total births: {total_births}")
     print(f"Total deaths: {total_deaths}")
     print(f"Total simulation time: {end_time - start_time:.2f} s")
+    
+    # Вывод результатов в файл если указан --out (заглушка / базовая реализация)
+    if out is not None:
+        with open(out, 'w') as f:
+            f.write(f"Ticks completed: {ticks}\n")
+            f.write(f"Average tick time: {avg_tick_time*1000:.3f} ms\n")
+            f.write(f"Final agent count: {final_agents}\n")
+            f.write(f"Average generation: {avg_generation:.2f}\n")
+            f.write(f"Total births: {total_births}\n")
+            f.write(f"Total deaths: {total_deaths}\n")
+            f.write(f"Total simulation time: {end_time - start_time:.2f} s\n")
+        print(f"Results written to: {out}")
 
 
 def main():
     parser = argparse.ArgumentParser(description="ALife MVP Simulation")
     parser.add_argument("--headless", action="store_true", help="Run without Pygame display")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility")
     parser.add_argument("--ticks", type=int, default=1000, help="Number of ticks for headless mode")
     parser.add_argument("--agents", type=int, default=None, help="Initial number of agents")
     parser.add_argument("--food", type=int, default=None, help="Initial/max number of food items")
+    parser.add_argument("--out", type=str, default=None, help="Output file for headless results")
     parser.add_argument("--hidden-neurons", type=int, default=None, help="Number of hidden neurons")
     args = parser.parse_args()
     
     if args.headless:
-        run_headless(args.ticks, args.agents, args.food, args.hidden_neurons)
+        run_headless(args.ticks, args.agents, args.food, args.hidden_neurons, args.seed, args.out)
         return
     
     # Visual mode (original behavior)
