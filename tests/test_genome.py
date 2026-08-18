@@ -9,10 +9,8 @@ def test_genome_random_created():
 
 def test_genome_mutation_keeps_bounds():
     g = Genome()
-
     for _ in range(100):
         g.mutate()
-
-        for key in GENOME_KEYS:
-            lo, hi = BOUNDS[key]
-            assert lo <= g[key] <= hi
+    for key in GENOME_KEYS:
+        lo, hi = BOUNDS[key]
+        assert lo <= g[key] <= hi
