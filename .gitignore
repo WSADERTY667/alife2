@@ -1,1 +1,58 @@
-Nothing to output - the changes only include source/config files (.md files) and no build artifacts, dependencies, or temp files that need to be ignored.
+```
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dependencies
+.venv/
+venv/
+env/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Build artifacts
+build/
+dist/
+*.egg
+*.egg-info/
+*.so
+*.dylib
+*.dll
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*
+.envrc
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.coverage.*
+.nyc_output
+istanbul.out
+
+# Coverage
+coverage/
+```
