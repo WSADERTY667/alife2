@@ -1,6 +1,5 @@
 # world.py
 # Класс мира симуляции
-import random
 import json
 import numpy as np
 from pathlib import Path
@@ -9,12 +8,14 @@ from .genome import Genome, genome_similarity
 from .agent import Agent
 from .hormones import Hormones
 from .brain import Brain
+from .rng import RNG
 
 
 class World:
     SCHEMA_VERSION = 2  # Updated schema version for new genome features
     
-    def __init__(self):
+    def __init__(self, rng=None):
+        self.rng = rng if rng is not None else RNG(seed=42)
         self.agents = []
         self.foods = []
         self.tick = 0
@@ -32,12 +33,12 @@ class World:
 
     def spawn_food(self):
         pos = np.array(
-            [random.uniform(10.0, WORLD_W - 10.0), random.uniform(10.0, WORLD_H - 10.0)],
+            [self.rng.uniform(10.0, WORLD_W - 10.0), self.rng.uniform(10.0, WORLD_H - 10.0)],
             dtype=np.float32,
         )
         self.foods.append({
             "pos": pos,
-            "nutrition": random.uniform(18.0, 30.0),
+            "nutrition": self.rng.uniform(18.0, 30.0),
             "eaten": False,
         })
 
@@ -45,10 +46,10 @@ class World:
         genome = Genome()
         genome.mutate()
         pos = np.array(
-            [random.uniform(30.0, WORLD_W - 30.0), random.uniform(30.0, WORLD_H - 30.0)],
+            [self.rng.uniform(30.0, WORLD_W - 30.0), self.rng.uniform(30.0, WORLD_H - 30.0)],
             dtype=np.float32,
         )
-        self.agents.append(Agent(pos, genome, 0, None))
+        self.agents.append(Agent(pos, genome, 0, None, rng=self.rng.copy()))
 
     def find_nearest_food(self, pos):
         best = None
@@ -119,7 +120,7 @@ class World:
     def update(self):
         self.tick += 1
         self.newborns = []
-        if len(self.foods) < FOOD_MAX and random.random() < FOOD_RESPAWN:
+        if len(self.foods) < FOOD_MAX and self.rng.next_float() < FOOD_RESPAWN:
             self.spawn_food()
         for a in self.agents:
             a.nearest_food = self.find_nearest_food(a.pos)

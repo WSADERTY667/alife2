@@ -2,10 +2,11 @@
 # Спайковая нейронная сеть (SNN) агента
 import numpy as np
 from .config import INPUT_SIZE, OUTPUT_SIZE, LEARNING, SYNAPTIC_SCALE, clamp
+from .rng import RNG
 
 
 class Brain:
-    def __init__(self, genome, n_hidden=None, parent_weights=None):
+    def __init__(self, genome, n_hidden=None, parent_weights=None, rng=None):
         # Наследуемая архитектура мозга - количество скрытых нейронов из генома
         if n_hidden is None:
             from .config import N_HIDDEN
@@ -21,20 +22,37 @@ class Brain:
         self.spikes = np.zeros(self.n, dtype=np.float32)
         self.out_rate = np.zeros(self.n_out, dtype=np.float32)
 
-        rng = np.random.default_rng()
-        self.mask = rng.random((self.n, self.n)) < genome["conn_prob"]
-        np.fill_diagonal(self.mask, False)
+        # Используем переданный RNG или создаём новый с seed=42 по умолчанию
+        self.rng = rng if rng is not None else RNG(seed=42)
 
-        in_mask = rng.random((self.n_in, self.n)) < max(genome["conn_prob"], 0.12)
+        self.mask = np.zeros((self.n, self.n), dtype=bool)
+        for i in range(self.n):
+            for j in range(self.n):
+                if i != j and self.rng.next_float() < genome["conn_prob"]:
+                    self.mask[i, j] = True
+
+        in_mask = np.zeros((self.n_in, self.n), dtype=bool)
+        in_prob = max(genome["conn_prob"], 0.12)
+        for i in range(self.n_in):
+            for j in range(self.n):
+                if self.rng.next_float() < in_prob:
+                    in_mask[i, j] = True
         self.mask[:self.n_in, :] |= in_mask
-        out_mask = rng.random((self.n, self.n_out)) < max(genome["conn_prob"], 0.15)
+        
+        out_mask = np.zeros((self.n, self.n_out), dtype=bool)
+        out_prob = max(genome["conn_prob"], 0.15)
+        for i in range(self.n):
+            for j in range(self.n_out):
+                if self.rng.next_float() < out_prob:
+                    out_mask[i, j] = True
         self.mask[:, -self.n_out:] |= out_mask
         np.fill_diagonal(self.mask, False)
 
-        self.W = (
-            rng.normal(0.0, genome["weight_scale"], (self.n, self.n)).astype(np.float32)
-            * self.mask
-        )
+        self.W = np.zeros((self.n, self.n), dtype=np.float32)
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.mask[i, j]:
+                    self.W[i, j] = self.rng.gauss(0.0, genome["weight_scale"])
 
         if parent_weights is not None and parent_weights.shape == self.W.shape:
             lam = clamp(genome["lamarckian_weight"], 0.0, 1.0)
@@ -64,7 +82,7 @@ class Brain:
 
         if arousal > 0.8:
             noise_size = self.n - INPUT_SIZE
-            noise = np.random.normal(0.0, (arousal - 0.8) * 0.02, noise_size).astype(np.float32)
+            noise = np.array([self.rng.gauss(0.0, (arousal - 0.8) * 0.02) for _ in range(noise_size)], dtype=np.float32)
             self.v[INPUT_SIZE:] += noise
 
         new_spikes = np.zeros(self.n, dtype=np.float32)
