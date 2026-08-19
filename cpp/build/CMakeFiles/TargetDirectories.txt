@@ -4,6 +4,7 @@
 /workspace/cpp/build/CMakeFiles/test_rng.dir
 /workspace/cpp/build/CMakeFiles/test_math_utils.dir
 /workspace/cpp/build/CMakeFiles/test_genome.dir
+/workspace/cpp/build/CMakeFiles/test_hormones.dir
 /workspace/cpp/build/CMakeFiles/test.dir
 /workspace/cpp/build/CMakeFiles/edit_cache.dir
 /workspace/cpp/build/CMakeFiles/rebuild_cache.dir
