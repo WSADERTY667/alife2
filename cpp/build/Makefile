@@ -204,6 +204,19 @@ test_genome/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/build
 .PHONY : test_genome/fast
 
+#=============================================================================
+# Target rules for targets named test_hormones
+
+# Build rule for target.
+test_hormones: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_hormones
+.PHONY : test_hormones
+
+# fast build rule for target.
+test_hormones/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_hormones.dir/build.make CMakeFiles/test_hormones.dir/build
+.PHONY : test_hormones/fast
+
 src/genome.o: src/genome.cpp.o
 .PHONY : src/genome.o
 
@@ -251,6 +264,30 @@ src/headless_main.s: src/headless_main.cpp.s
 src/headless_main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_headless.dir/build.make CMakeFiles/alife_headless.dir/src/headless_main.cpp.s
 .PHONY : src/headless_main.cpp.s
+
+src/hormones.o: src/hormones.cpp.o
+.PHONY : src/hormones.o
+
+# target to build an object file
+src/hormones.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/hormones.cpp.o
+.PHONY : src/hormones.cpp.o
+
+src/hormones.i: src/hormones.cpp.i
+.PHONY : src/hormones.i
+
+# target to preprocess a source file
+src/hormones.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/hormones.cpp.i
+.PHONY : src/hormones.cpp.i
+
+src/hormones.s: src/hormones.cpp.s
+.PHONY : src/hormones.s
+
+# target to generate assembly for a file
+src/hormones.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/hormones.cpp.s
+.PHONY : src/hormones.cpp.s
 
 src/math_utils.o: src/math_utils.cpp.o
 .PHONY : src/math_utils.o
@@ -348,6 +385,30 @@ tests/test_genome.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_genome.dir/build.make CMakeFiles/test_genome.dir/tests/test_genome.cpp.s
 .PHONY : tests/test_genome.cpp.s
 
+tests/test_hormones.o: tests/test_hormones.cpp.o
+.PHONY : tests/test_hormones.o
+
+# target to build an object file
+tests/test_hormones.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_hormones.dir/build.make CMakeFiles/test_hormones.dir/tests/test_hormones.cpp.o
+.PHONY : tests/test_hormones.cpp.o
+
+tests/test_hormones.i: tests/test_hormones.cpp.i
+.PHONY : tests/test_hormones.i
+
+# target to preprocess a source file
+tests/test_hormones.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_hormones.dir/build.make CMakeFiles/test_hormones.dir/tests/test_hormones.cpp.i
+.PHONY : tests/test_hormones.cpp.i
+
+tests/test_hormones.s: tests/test_hormones.cpp.s
+.PHONY : tests/test_hormones.s
+
+# target to generate assembly for a file
+tests/test_hormones.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_hormones.dir/build.make CMakeFiles/test_hormones.dir/tests/test_hormones.cpp.s
+.PHONY : tests/test_hormones.cpp.s
+
 tests/test_math_utils.o: tests/test_math_utils.cpp.o
 .PHONY : tests/test_math_utils.o
 
@@ -432,6 +493,7 @@ help:
 	@echo "... alife_core"
 	@echo "... alife_headless"
 	@echo "... test_genome"
+	@echo "... test_hormones"
 	@echo "... test_math_utils"
 	@echo "... test_rng"
 	@echo "... test_version"
@@ -441,6 +503,9 @@ help:
 	@echo "... src/headless_main.o"
 	@echo "... src/headless_main.i"
 	@echo "... src/headless_main.s"
+	@echo "... src/hormones.o"
+	@echo "... src/hormones.i"
+	@echo "... src/hormones.s"
 	@echo "... src/math_utils.o"
 	@echo "... src/math_utils.i"
 	@echo "... src/math_utils.s"
@@ -453,6 +518,9 @@ help:
 	@echo "... tests/test_genome.o"
 	@echo "... tests/test_genome.i"
 	@echo "... tests/test_genome.s"
+	@echo "... tests/test_hormones.o"
+	@echo "... tests/test_hormones.i"
+	@echo "... tests/test_hormones.s"
 	@echo "... tests/test_math_utils.o"
 	@echo "... tests/test_math_utils.i"
 	@echo "... tests/test_math_utils.s"

@@ -5,41 +5,30 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Build directories
-build/
-dist/
+# C++ build artifacts
+cpp/build/
+cpp/CMakeFiles/
+*.a
 *.so
 *.dylib
 *.dll
+*.exe
 
-# CMake build files
-cpp/build/
-
-# Logs
+# Temporary and log files
+*.tmp
 *.log
+*.swp
 
-# Environment files
-.env
-.env.local
-*.env.*
-
-# IDE files
+# IDE and editor files
 .vscode/
 .idea/
-*.swp
 *.swo
-*.tmp
 
 # Coverage reports
 coverage/
 htmlcov/
 .coverage
 
-# Testing
-.pytest_cache/
-.mypy_cache/
-
-# OS generated files
-.DS_Store
-Thumbs.db
+# Distribution artifacts
+dist/
 ```

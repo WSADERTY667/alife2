@@ -1,5 +1,6 @@
-test_version 2 0.000840563
-test_rng 2 0.000880629
-test_math_utils 2 0.000773813
-test_genome 1 0.00475071
+test_version 3 0.000642574
+test_rng 3 0.000645179
+test_math_utils 3 0.000509978
+test_genome 2 0.00244494
+test_hormones 1 0.0404481
 ---
