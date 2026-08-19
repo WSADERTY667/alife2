@@ -51,3 +51,9 @@ add_test(NAME test_hormones COMMAND test_hormones)
 add_executable(test_brain tests/test_brain.cpp)
 target_link_libraries(test_brain PRIVATE alife_core)
 add_test(NAME test_brain COMMAND test_brain)
+
+# Agent и World
+target_sources(alife_core PRIVATE
+    src/agent.cpp
+    src/world.cpp
+)

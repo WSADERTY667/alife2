@@ -2,28 +2,29 @@
 #include <string>
 #include <optional>
 #include "alife/version.h"
+#include "alife/world.h"
 
 void print_help(const std::string& program_name) {
     std::cout << "Usage: " << program_name << " [OPTIONS]\n"
         << "\n"
-        << "ALife Headless Simulation Stub\n"
+        << "ALife Headless Simulation\n"
         << "\n"
         << "Options:\n"
         << "  --help       Show this help message and exit\n"
         << "  --seed <N>   Set random seed (default: 42)\n"
         << "  --ticks <N>  Set number of simulation ticks (default: 100)\n"
-        << "  --agents <N> Set number of agents (default: 50)\n"
-        << "  --food <N>   Set initial food amount (default: 100)\n"
+        << "  --agents <N> Set number of agents (default: 24)\n"
+        << "  --food <N>   Set initial food amount (default: 90)\n"
         << "  --out <PATH> Set output file path (default: stdout)\n"
         << "\n"
         << "Version: " << alife::get_version() << "\n";
 }
 
 struct Config {
-    std::optional<int> seed;
-    std::optional<int> ticks;
-    std::optional<int> agents;
-    std::optional<int> food;
+    int seed = 42;
+    int ticks = 100;
+    int agents = 24;
+    int food = 90;
     std::optional<std::string> out;
 };
 
@@ -73,27 +74,37 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    // Print configuration (stub - no actual simulation)
-    std::cout << "ALife Headless Simulation (stub)\n";
-    std::cout << "Version: " << alife::get_version() << "\n";
+    // Создание мира с заданными параметрами
+    alife::World world(
+        static_cast<uint64_t>(config.seed),
+        config.agents,
+        config.food
+    );
 
-    if (config.seed.has_value()) {
-        std::cout << "Seed: " << config.seed.value() << "\n";
-    }
-    if (config.ticks.has_value()) {
-        std::cout << "Ticks: " << config.ticks.value() << "\n";
-    }
-    if (config.agents.has_value()) {
-        std::cout << "Agents: " << config.agents.value() << "\n";
-    }
-    if (config.food.has_value()) {
-        std::cout << "Food: " << config.food.value() << "\n";
-    }
-    if (config.out.has_value()) {
-        std::cout << "Output: " << config.out.value() << "\n";
+    // Запуск симуляции
+    for (int t = 0; t < config.ticks; ++t) {
+        world.update();
+        
+        // Проверка на NaN в энергии агентов
+        for (const auto& agent : world.get_agents()) {
+            if (std::isnan(agent.energy) || std::isinf(agent.energy)) {
+                std::cerr << "Error: NaN/Inf detected in agent energy at tick " << t << "\n";
+                return 1;
+            }
+        }
     }
 
-    std::cout << "Simulation not implemented (stub).\n";
+    // Вывод результата в JSON
+    std::string json_output = world.to_json(config.out);
+    
+    if (!config.out.has_value()) {
+        std::cout << json_output;
+    } else {
+        std::cout << "Simulation completed. Output saved to: " << config.out.value() << "\n";
+        std::cout << "Final tick: " << world.get_tick() << "\n";
+        std::cout << "Final agent count: " << world.get_agent_count() << "\n";
+        std::cout << "Final food count: " << world.get_food_count() << "\n";
+    }
 
     return 0;
 }

@@ -1,4 +1,8 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/alife_core.dir/src/agent.cpp.o"
+  "CMakeFiles/alife_core.dir/src/agent.cpp.o.d"
+  "CMakeFiles/alife_core.dir/src/brain.cpp.o"
+  "CMakeFiles/alife_core.dir/src/brain.cpp.o.d"
   "CMakeFiles/alife_core.dir/src/genome.cpp.o"
   "CMakeFiles/alife_core.dir/src/genome.cpp.o.d"
   "CMakeFiles/alife_core.dir/src/hormones.cpp.o"
@@ -9,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/alife_core.dir/src/rng.cpp.o.d"
   "CMakeFiles/alife_core.dir/src/version.cpp.o"
   "CMakeFiles/alife_core.dir/src/version.cpp.o.d"
+  "CMakeFiles/alife_core.dir/src/world.cpp.o"
+  "CMakeFiles/alife_core.dir/src/world.cpp.o.d"
   "libalife_core.a"
   "libalife_core.pdb"
 )
