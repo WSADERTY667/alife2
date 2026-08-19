@@ -1,34 +1,55 @@
 ```
-# Python cache files
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# C++ build artifacts
-cpp/build/
-cpp/CMakeFiles/
+# Build artifacts
+build/
+cmake-build-*/
+*.o
+*.obj
 *.a
+*.lib
 *.so
-*.dylib
 *.dll
 *.exe
+*.out
 
-# Temporary and log files
-*.tmp
-*.log
-*.swp
+# Dependencies
+vendor/
+external/
 
-# IDE and editor files
+# Tests
+*.golden.json
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
 .idea/
+*.swp
 *.swo
+*.tmp
 
-# Coverage reports
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Distribution artifacts
+# Python (if applicable)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+.eggs/
 dist/
 ```

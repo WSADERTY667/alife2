@@ -11,6 +11,7 @@ add_library(alife_core STATIC
     src/math_utils.cpp
     src/genome.cpp
     src/hormones.cpp
+    src/brain.cpp
 )
 
 target_include_directories(alife_core PUBLIC
@@ -46,3 +47,7 @@ add_test(NAME test_genome COMMAND test_genome)
 add_executable(test_hormones tests/test_hormones.cpp)
 target_link_libraries(test_hormones PRIVATE alife_core)
 add_test(NAME test_hormones COMMAND test_hormones)
+
+add_executable(test_brain tests/test_brain.cpp)
+target_link_libraries(test_brain PRIVATE alife_core)
+add_test(NAME test_brain COMMAND test_brain)

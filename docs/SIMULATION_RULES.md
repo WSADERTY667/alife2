@@ -442,3 +442,201 @@ python3 tools/export_hormones_golden.py
 - Allowed tolerance for comparison: `1e-10`
 - No new hormones added, no existing hormones removed
 - Brain and World modules not included in this migration
+
+---
+
+# Brain (SNN) Specification
+
+## Overview
+
+The Brain module implements a spiking neural network (SNN) for agents in the ALife simulation. This document describes the architecture, update rules, spike generation, eligibility trace, dopamine-modulated STDP learning, and parent weight inheritance.
+
+## Architecture
+
+### Neuron Counts
+
+| Type | Count | Description |
+|------|-------|-------------|
+| Input (sensory) | 12 | Receives sensor data |
+| Hidden | 160 (default) | Internal processing neurons |
+| Output (motor) | 6 | Produces action rates |
+| **Total** | **178** | INPUT_SIZE + N_HIDDEN + OUTPUT_SIZE |
+
+### Neuron Layout
+
+```
+[0..11]      - Input neurons (sensors)
+[12..171]    - Hidden neurons (n_hidden = 160)
+[172..177]   - Output neurons (motor outputs)
+```
+
+### Genes Controlling Brain
+
+| Gene | Min | Max | Default | Description |
+|------|-----|-----|---------|-------------|
+| `conn_prob` | 0.02 | 0.25 | 0.1 | Connection probability |
+| `weight_scale` | 0.05 | 1.5 | 0.5 | Weight initialization scale |
+| `weight_max` | 0.5 | 3.0 | 2.0 | Maximum synaptic weight |
+| `membrane_decay` | 0.70 | 0.98 | 0.85 | Membrane potential decay |
+| `threshold` | 0.5 | 1.8 | 1.0 | Spike threshold |
+| `stdp_rate` | 0.0005 | 0.05 | 0.01 | STDP learning rate |
+| `lamarckian_weight` | 0.0 | 0.9 | 0.0 | Parent weight inheritance |
+
+## Initialization
+
+### Connection Mask
+
+1. Generate random mask with probability `conn_prob`
+2. Force diagonal to False (no self-connections)
+3. Boost input connections: ensure at least 12% connectivity from inputs
+4. Boost output connections: ensure at least 15% connectivity to outputs
+
+### Weight Initialization
+
+For each connection in mask:
+```
+W[i,j] = gauss(0, weight_scale)
+```
+
+### Parent Weight Inheritance
+
+If parent weights are provided:
+```
+lam = clamp(lamarckian_weight, 0.0, 1.0)
+W = (1 - lam) * W_new + lam * W_parent
+W *= mask  # Zero out non-connected weights
+```
+
+## Update Rules
+
+### Step Function
+
+Each step processes:
+1. Compute synaptic current from previous spikes
+2. Apply membrane decay and input current
+3. Add noise if arousal is high
+4. Generate spikes for hidden neurons
+5. Update output rates
+6. Apply STDP learning (if enabled)
+
+### Membrane Potential Update
+
+```python
+arousal = mod.get("arousal", 0.0)
+decay = clamp(membrane_decay + arousal * 0.02, 0.50, 0.99)
+threshold = clamp(threshold_base - arousal * 0.05, 0.30, 2.0)
+
+v = v * decay + current * SYNAPTIC_SCALE
+```
+
+Where `SYNAPTIC_SCALE = 0.085`.
+
+### Arousal Noise
+
+If `arousal > 0.8`:
+```python
+noise_std = (arousal - 0.8) * 0.02
+v[hidden_and_output] += gauss(0, noise_std)
+```
+
+## Spike Rules
+
+### Input Neurons
+
+Input neurons directly reflect sensor values:
+```
+spikes_input = clamp(sensors, 0.0, 1.0)
+```
+
+### Hidden Neurons
+
+Hidden neurons fire when membrane potential exceeds threshold:
+```python
+fired = v_hidden >= threshold
+spikes_hidden[fired] = 1.0
+v_hidden[fired] = 0.0  # Reset after spike
+```
+
+### Output Rates
+
+Output is an exponential moving average of output neuron spikes:
+```python
+out_rate = 0.75 * out_rate + 0.25 * spikes_output
+```
+
+## Eligibility Trace
+
+Eligibility trace tracks pre-post spike correlations for STDP:
+
+```python
+if learning and abs(learn_rate) > 1e-6:
+    delta = outer(pre, post) - outer(post, pre)
+    E = E * 0.95 + delta * stdp_rate
+```
+
+Where:
+- `pre` = spikes before update
+- `post` = spikes after update
+- `delta[i,j]` = pre[i]*post[j] - post[i]*pre[j]
+- Decay factor = 0.95
+
+## Dopamine-Modulated STDP
+
+Learning rate is modulated by dopamine and plasticity:
+
+```python
+learn_rate = clamp(plasticity * dopamine, -2.0, 2.0)
+W += learn_rate * E * mask
+W = clip(W, -max_w, max_w)
+W *= mask  # Zero out non-connected weights
+```
+
+### How Dopamine Affects Learning
+
+| Dopamine Level | Effect |
+|----------------|--------|
+| High (> 0.7) | Strong positive learning, reinforces recent patterns |
+| Medium (0.3-0.7) | Moderate learning |
+| Low (< 0.3) | Weak or no learning |
+| Negative (with low plasticity) | Can cause forgetting |
+
+### Plasticity Modulator
+
+The `plasticity` modulator comes from hormone effects:
+- Increased by dopamine signal
+- Decreased by high cortisol (stress)
+- Reduced by depression/breakdown states
+
+## Implementation Files
+
+- `cpp/include/alife/brain.h` - Header file with class definition
+- `cpp/src/brain.cpp` - Implementation file
+- `cpp/tests/test_brain.cpp` - Unit tests
+- `tools/export_brain_golden.py` - Golden data export tool
+
+## Testing
+
+Run tests with:
+```bash
+cd cpp/build
+ctest --output-on-failure
+```
+
+Generate golden data with:
+```bash
+python3 tools/export_brain_golden.py
+```
+
+## Parity Notes
+
+- C++ implementation uses `double` precision for numerical parity with Python
+- Same RNG seed produces identical results
+- Allowed tolerance for comparison: `1e-10`
+- No architecture changes, no new neuron types
+- All formulas identical to Python implementation
+
+## Known Numerical Differences
+
+- Minor floating-point rounding differences may occur due to operation ordering
+- Gaussian noise uses Box-Muller transform (same as Python)
+- Matrix operations may have different ordering but same mathematical result
