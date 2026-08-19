@@ -217,6 +217,67 @@ test_hormones/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_hormones.dir/build.make CMakeFiles/test_hormones.dir/build
 .PHONY : test_hormones/fast
 
+#=============================================================================
+# Target rules for targets named test_brain
+
+# Build rule for target.
+test_brain: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_brain
+.PHONY : test_brain
+
+# fast build rule for target.
+test_brain/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_brain.dir/build.make CMakeFiles/test_brain.dir/build
+.PHONY : test_brain/fast
+
+src/agent.o: src/agent.cpp.o
+.PHONY : src/agent.o
+
+# target to build an object file
+src/agent.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/agent.cpp.o
+.PHONY : src/agent.cpp.o
+
+src/agent.i: src/agent.cpp.i
+.PHONY : src/agent.i
+
+# target to preprocess a source file
+src/agent.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/agent.cpp.i
+.PHONY : src/agent.cpp.i
+
+src/agent.s: src/agent.cpp.s
+.PHONY : src/agent.s
+
+# target to generate assembly for a file
+src/agent.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/agent.cpp.s
+.PHONY : src/agent.cpp.s
+
+src/brain.o: src/brain.cpp.o
+.PHONY : src/brain.o
+
+# target to build an object file
+src/brain.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/brain.cpp.o
+.PHONY : src/brain.cpp.o
+
+src/brain.i: src/brain.cpp.i
+.PHONY : src/brain.i
+
+# target to preprocess a source file
+src/brain.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/brain.cpp.i
+.PHONY : src/brain.cpp.i
+
+src/brain.s: src/brain.cpp.s
+.PHONY : src/brain.s
+
+# target to generate assembly for a file
+src/brain.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/brain.cpp.s
+.PHONY : src/brain.cpp.s
+
 src/genome.o: src/genome.cpp.o
 .PHONY : src/genome.o
 
@@ -361,6 +422,54 @@ src/version.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/version.cpp.s
 .PHONY : src/version.cpp.s
 
+src/world.o: src/world.cpp.o
+.PHONY : src/world.o
+
+# target to build an object file
+src/world.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/world.cpp.o
+.PHONY : src/world.cpp.o
+
+src/world.i: src/world.cpp.i
+.PHONY : src/world.i
+
+# target to preprocess a source file
+src/world.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/world.cpp.i
+.PHONY : src/world.cpp.i
+
+src/world.s: src/world.cpp.s
+.PHONY : src/world.s
+
+# target to generate assembly for a file
+src/world.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/world.cpp.s
+.PHONY : src/world.cpp.s
+
+tests/test_brain.o: tests/test_brain.cpp.o
+.PHONY : tests/test_brain.o
+
+# target to build an object file
+tests/test_brain.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_brain.dir/build.make CMakeFiles/test_brain.dir/tests/test_brain.cpp.o
+.PHONY : tests/test_brain.cpp.o
+
+tests/test_brain.i: tests/test_brain.cpp.i
+.PHONY : tests/test_brain.i
+
+# target to preprocess a source file
+tests/test_brain.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_brain.dir/build.make CMakeFiles/test_brain.dir/tests/test_brain.cpp.i
+.PHONY : tests/test_brain.cpp.i
+
+tests/test_brain.s: tests/test_brain.cpp.s
+.PHONY : tests/test_brain.s
+
+# target to generate assembly for a file
+tests/test_brain.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_brain.dir/build.make CMakeFiles/test_brain.dir/tests/test_brain.cpp.s
+.PHONY : tests/test_brain.cpp.s
+
 tests/test_genome.o: tests/test_genome.cpp.o
 .PHONY : tests/test_genome.o
 
@@ -492,11 +601,18 @@ help:
 	@echo "... test"
 	@echo "... alife_core"
 	@echo "... alife_headless"
+	@echo "... test_brain"
 	@echo "... test_genome"
 	@echo "... test_hormones"
 	@echo "... test_math_utils"
 	@echo "... test_rng"
 	@echo "... test_version"
+	@echo "... src/agent.o"
+	@echo "... src/agent.i"
+	@echo "... src/agent.s"
+	@echo "... src/brain.o"
+	@echo "... src/brain.i"
+	@echo "... src/brain.s"
 	@echo "... src/genome.o"
 	@echo "... src/genome.i"
 	@echo "... src/genome.s"
@@ -515,6 +631,12 @@ help:
 	@echo "... src/version.o"
 	@echo "... src/version.i"
 	@echo "... src/version.s"
+	@echo "... src/world.o"
+	@echo "... src/world.i"
+	@echo "... src/world.s"
+	@echo "... tests/test_brain.o"
+	@echo "... tests/test_brain.i"
+	@echo "... tests/test_brain.s"
 	@echo "... tests/test_genome.o"
 	@echo "... tests/test_genome.i"
 	@echo "... tests/test_genome.s"
