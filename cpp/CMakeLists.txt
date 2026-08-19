@@ -12,6 +12,7 @@ add_library(alife_core STATIC
     src/genome.cpp
     src/hormones.cpp
     src/brain.cpp
+    src/api.cpp
 )
 
 target_include_directories(alife_core PUBLIC
@@ -57,3 +58,8 @@ target_sources(alife_core PRIVATE
     src/agent.cpp
     src/world.cpp
 )
+
+# C API Test
+add_executable(test_api tests/test_api.cpp)
+target_link_libraries(test_api PRIVATE alife_core)
+add_test(NAME test_api COMMAND test_api)

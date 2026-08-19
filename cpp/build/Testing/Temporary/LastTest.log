@@ -1,10 +1,10 @@
-Start testing: Aug 19 21:49 UTC
+Start testing: Aug 19 22:41 UTC
 ----------------------------------------------------------
-1/5 Testing: test_version
-1/5 Test: test_version
+1/7 Testing: test_version
+1/7 Test: test_version
 Command: "/workspace/cpp/build/test_version"
 Directory: /workspace/cpp/build
-"test_version" start time: Aug 19 21:49 UTC
+"test_version" start time: Aug 19 22:41 UTC
 Output:
 ----------------------------------------------------------
 PASS: version = 0.1.0
@@ -12,15 +12,15 @@ PASS: version = 0.1.0
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"test_version" end time: Aug 19 21:49 UTC
+"test_version" end time: Aug 19 22:41 UTC
 "test_version" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-2/5 Testing: test_rng
-2/5 Test: test_rng
+2/7 Testing: test_rng
+2/7 Test: test_rng
 Command: "/workspace/cpp/build/test_rng"
 Directory: /workspace/cpp/build
-"test_rng" start time: Aug 19 21:49 UTC
+"test_rng" start time: Aug 19 22:41 UTC
 Output:
 ----------------------------------------------------------
 === RNG Tests ===
@@ -86,15 +86,15 @@ Failed: 0
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"test_rng" end time: Aug 19 21:49 UTC
+"test_rng" end time: Aug 19 22:41 UTC
 "test_rng" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-3/5 Testing: test_math_utils
-3/5 Test: test_math_utils
+3/7 Testing: test_math_utils
+3/7 Test: test_math_utils
 Command: "/workspace/cpp/build/test_math_utils"
 Directory: /workspace/cpp/build
-"test_math_utils" start time: Aug 19 21:49 UTC
+"test_math_utils" start time: Aug 19 22:41 UTC
 Output:
 ----------------------------------------------------------
 === Math Utils Tests ===
@@ -132,15 +132,15 @@ Failed: 0
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"test_math_utils" end time: Aug 19 21:49 UTC
+"test_math_utils" end time: Aug 19 22:41 UTC
 "test_math_utils" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-4/5 Testing: test_genome
-4/5 Test: test_genome
+4/7 Testing: test_genome
+4/7 Test: test_genome
 Command: "/workspace/cpp/build/test_genome"
 Directory: /workspace/cpp/build
-"test_genome" start time: Aug 19 21:49 UTC
+"test_genome" start time: Aug 19 22:41 UTC
 Output:
 ----------------------------------------------------------
 === Genome Tests ===
@@ -188,15 +188,15 @@ Failed: 0
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"test_genome" end time: Aug 19 21:49 UTC
+"test_genome" end time: Aug 19 22:41 UTC
 "test_genome" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-5/5 Testing: test_hormones
-5/5 Test: test_hormones
+5/7 Testing: test_hormones
+5/7 Test: test_hormones
 Command: "/workspace/cpp/build/test_hormones"
 Directory: /workspace/cpp/build
-"test_hormones" start time: Aug 19 21:49 UTC
+"test_hormones" start time: Aug 19 22:41 UTC
 Output:
 ----------------------------------------------------------
 === Hormones Tests ===
@@ -214,8 +214,65 @@ All tests PASSED!
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"test_hormones" end time: Aug 19 21:49 UTC
+"test_hormones" end time: Aug 19 22:41 UTC
 "test_hormones" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Aug 19 21:49 UTC
+6/7 Testing: test_brain
+6/7 Test: test_brain
+Command: "/workspace/cpp/build/test_brain"
+Directory: /workspace/cpp/build
+"test_brain" start time: Aug 19 22:41 UTC
+Output:
+----------------------------------------------------------
+=== Brain Tests ===
+Test: output size... PASSED
+Test: no NaN after 1000 steps... PASSED
+Test: determinism with same seed... PASSED
+Test: parent weight inheritance... PASSED
+Test: step returns OUTPUT_SIZE values... PASSED
+
+=== All tests PASSED ===
+<end of output>
+Test time =   0.96 sec
+----------------------------------------------------------
+Test Passed.
+"test_brain" end time: Aug 19 22:41 UTC
+"test_brain" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/7 Testing: test_api
+7/7 Test: test_api
+Command: "/workspace/cpp/build/test_api"
+Directory: /workspace/cpp/build
+"test_api" start time: Aug 19 22:41 UTC
+Output:
+----------------------------------------------------------
+=== ALife C API Tests ===
+
+Running test_world_create_destroy... PASS
+Running test_seed_and_reset... PASS
+Running test_world_step... PASS
+Running test_full_integration... PASS
+Running test_agent_count... PASS
+Running test_get_agents... PASS
+Running test_food_count... PASS
+Running test_get_foods... PASS
+Running test_agent_reward... PASS
+Running test_agent_punish... PASS
+Running test_spawn_food... PASS
+Running test_buffer_edge_cases... PASS
+
+=== Test Summary ===
+Passed: 12
+Failed: 0
+Total:  12
+<end of output>
+Test time =  18.23 sec
+----------------------------------------------------------
+Test Passed.
+"test_api" end time: Aug 19 22:41 UTC
+"test_api" time elapsed: 00:00:18
+----------------------------------------------------------
+
+End testing: Aug 19 22:41 UTC
