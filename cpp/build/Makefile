@@ -230,6 +230,19 @@ test_brain/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_brain.dir/build.make CMakeFiles/test_brain.dir/build
 .PHONY : test_brain/fast
 
+#=============================================================================
+# Target rules for targets named test_api
+
+# Build rule for target.
+test_api: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_api
+.PHONY : test_api
+
+# fast build rule for target.
+test_api/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_api.dir/build.make CMakeFiles/test_api.dir/build
+.PHONY : test_api/fast
+
 src/agent.o: src/agent.cpp.o
 .PHONY : src/agent.o
 
@@ -253,6 +266,30 @@ src/agent.s: src/agent.cpp.s
 src/agent.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/agent.cpp.s
 .PHONY : src/agent.cpp.s
+
+src/api.o: src/api.cpp.o
+.PHONY : src/api.o
+
+# target to build an object file
+src/api.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/api.cpp.o
+.PHONY : src/api.cpp.o
+
+src/api.i: src/api.cpp.i
+.PHONY : src/api.i
+
+# target to preprocess a source file
+src/api.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/api.cpp.i
+.PHONY : src/api.cpp.i
+
+src/api.s: src/api.cpp.s
+.PHONY : src/api.s
+
+# target to generate assembly for a file
+src/api.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/api.cpp.s
+.PHONY : src/api.cpp.s
 
 src/brain.o: src/brain.cpp.o
 .PHONY : src/brain.o
@@ -446,6 +483,30 @@ src/world.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/alife_core.dir/build.make CMakeFiles/alife_core.dir/src/world.cpp.s
 .PHONY : src/world.cpp.s
 
+tests/test_api.o: tests/test_api.cpp.o
+.PHONY : tests/test_api.o
+
+# target to build an object file
+tests/test_api.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_api.dir/build.make CMakeFiles/test_api.dir/tests/test_api.cpp.o
+.PHONY : tests/test_api.cpp.o
+
+tests/test_api.i: tests/test_api.cpp.i
+.PHONY : tests/test_api.i
+
+# target to preprocess a source file
+tests/test_api.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_api.dir/build.make CMakeFiles/test_api.dir/tests/test_api.cpp.i
+.PHONY : tests/test_api.cpp.i
+
+tests/test_api.s: tests/test_api.cpp.s
+.PHONY : tests/test_api.s
+
+# target to generate assembly for a file
+tests/test_api.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_api.dir/build.make CMakeFiles/test_api.dir/tests/test_api.cpp.s
+.PHONY : tests/test_api.cpp.s
+
 tests/test_brain.o: tests/test_brain.cpp.o
 .PHONY : tests/test_brain.o
 
@@ -601,6 +662,7 @@ help:
 	@echo "... test"
 	@echo "... alife_core"
 	@echo "... alife_headless"
+	@echo "... test_api"
 	@echo "... test_brain"
 	@echo "... test_genome"
 	@echo "... test_hormones"
@@ -610,6 +672,9 @@ help:
 	@echo "... src/agent.o"
 	@echo "... src/agent.i"
 	@echo "... src/agent.s"
+	@echo "... src/api.o"
+	@echo "... src/api.i"
+	@echo "... src/api.s"
 	@echo "... src/brain.o"
 	@echo "... src/brain.i"
 	@echo "... src/brain.s"
@@ -634,6 +699,9 @@ help:
 	@echo "... src/world.o"
 	@echo "... src/world.i"
 	@echo "... src/world.s"
+	@echo "... tests/test_api.o"
+	@echo "... tests/test_api.i"
+	@echo "... tests/test_api.s"
 	@echo "... tests/test_brain.o"
 	@echo "... tests/test_brain.i"
 	@echo "... tests/test_brain.s"

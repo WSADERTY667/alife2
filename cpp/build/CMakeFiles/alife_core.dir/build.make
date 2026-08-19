@@ -153,10 +153,24 @@ CMakeFiles/alife_core.dir/src/brain.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/alife_core.dir/src/brain.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspace/cpp/src/brain.cpp -o CMakeFiles/alife_core.dir/src/brain.cpp.s
 
+CMakeFiles/alife_core.dir/src/api.cpp.o: CMakeFiles/alife_core.dir/flags.make
+CMakeFiles/alife_core.dir/src/api.cpp.o: /workspace/cpp/src/api.cpp
+CMakeFiles/alife_core.dir/src/api.cpp.o: CMakeFiles/alife_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/alife_core.dir/src/api.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/alife_core.dir/src/api.cpp.o -MF CMakeFiles/alife_core.dir/src/api.cpp.o.d -o CMakeFiles/alife_core.dir/src/api.cpp.o -c /workspace/cpp/src/api.cpp
+
+CMakeFiles/alife_core.dir/src/api.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/alife_core.dir/src/api.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspace/cpp/src/api.cpp > CMakeFiles/alife_core.dir/src/api.cpp.i
+
+CMakeFiles/alife_core.dir/src/api.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/alife_core.dir/src/api.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspace/cpp/src/api.cpp -o CMakeFiles/alife_core.dir/src/api.cpp.s
+
 CMakeFiles/alife_core.dir/src/agent.cpp.o: CMakeFiles/alife_core.dir/flags.make
 CMakeFiles/alife_core.dir/src/agent.cpp.o: /workspace/cpp/src/agent.cpp
 CMakeFiles/alife_core.dir/src/agent.cpp.o: CMakeFiles/alife_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/alife_core.dir/src/agent.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/alife_core.dir/src/agent.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/alife_core.dir/src/agent.cpp.o -MF CMakeFiles/alife_core.dir/src/agent.cpp.o.d -o CMakeFiles/alife_core.dir/src/agent.cpp.o -c /workspace/cpp/src/agent.cpp
 
 CMakeFiles/alife_core.dir/src/agent.cpp.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/alife_core.dir/src/agent.cpp.s: cmake_force
 CMakeFiles/alife_core.dir/src/world.cpp.o: CMakeFiles/alife_core.dir/flags.make
 CMakeFiles/alife_core.dir/src/world.cpp.o: /workspace/cpp/src/world.cpp
 CMakeFiles/alife_core.dir/src/world.cpp.o: CMakeFiles/alife_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/alife_core.dir/src/world.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/alife_core.dir/src/world.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/alife_core.dir/src/world.cpp.o -MF CMakeFiles/alife_core.dir/src/world.cpp.o.d -o CMakeFiles/alife_core.dir/src/world.cpp.o -c /workspace/cpp/src/world.cpp
 
 CMakeFiles/alife_core.dir/src/world.cpp.i: cmake_force
@@ -189,6 +203,7 @@ alife_core_OBJECTS = \
 "CMakeFiles/alife_core.dir/src/genome.cpp.o" \
 "CMakeFiles/alife_core.dir/src/hormones.cpp.o" \
 "CMakeFiles/alife_core.dir/src/brain.cpp.o" \
+"CMakeFiles/alife_core.dir/src/api.cpp.o" \
 "CMakeFiles/alife_core.dir/src/agent.cpp.o" \
 "CMakeFiles/alife_core.dir/src/world.cpp.o"
 
@@ -201,11 +216,12 @@ libalife_core.a: CMakeFiles/alife_core.dir/src/math_utils.cpp.o
 libalife_core.a: CMakeFiles/alife_core.dir/src/genome.cpp.o
 libalife_core.a: CMakeFiles/alife_core.dir/src/hormones.cpp.o
 libalife_core.a: CMakeFiles/alife_core.dir/src/brain.cpp.o
+libalife_core.a: CMakeFiles/alife_core.dir/src/api.cpp.o
 libalife_core.a: CMakeFiles/alife_core.dir/src/agent.cpp.o
 libalife_core.a: CMakeFiles/alife_core.dir/src/world.cpp.o
 libalife_core.a: CMakeFiles/alife_core.dir/build.make
 libalife_core.a: CMakeFiles/alife_core.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX static library libalife_core.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/workspace/cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX static library libalife_core.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/alife_core.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/alife_core.dir/link.txt --verbose=$(VERBOSE)
 
